@@ -54,6 +54,14 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const url = new URL(request.url);
+    const pathname = url.pathname;
+
+    // Do not pass static image & media asset requests to TanStack Start SSR page renderer
+    if (/\.(jpg|jpeg|png|webp|svg|gif|ico|css|js|woff2?|map)$/i.test(pathname) || pathname.startsWith("/images/")) {
+      return new Response(null, { status: 404 });
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

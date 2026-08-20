@@ -1,4 +1,5 @@
 import { useState, type ImgHTMLAttributes } from "react";
+import { resolveImageUrl } from "@/lib/images";
 
 interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string;
@@ -8,13 +9,14 @@ export function LazyImage({
   src,
   alt = "",
   className = "",
-  fallbackSrc = "/images/hero-drape.jpg",
+  fallbackSrc,
   ...props
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const finalSrc = hasError || !src ? fallbackSrc : src;
+  const resolved = resolveImageUrl(typeof src === "string" ? src : undefined, fallbackSrc);
+  const finalSrc = hasError ? resolveImageUrl(fallbackSrc) : resolved;
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
