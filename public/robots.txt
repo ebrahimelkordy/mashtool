@@ -1,0 +1,7 @@
+# User-agent: *
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://mysticloom.com/sitemap.xml
