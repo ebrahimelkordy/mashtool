@@ -9,10 +9,13 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 export default defineConfig({
   vite: {
     optimizeDeps: {
-      include: ["@supabase/supabase-js"],
+      include: ["@supabase/supabase-js", "@tanstack/router-core"],
     },
   },
   tanstackStart: {
     server: { entry: "server" },
+    serverFns: {
+      disableCsrfMiddlewareWarning: true,
+    },
   },
 });
