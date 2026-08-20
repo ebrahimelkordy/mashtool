@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRight, Sparkles, BadgeCheck } from "lucide-react";
 import { SiteLayout, SectionHeading, PrimaryButton, GhostButton } from "@/components/site/site-layout";
 import { ProductCard } from "@/components/site/product-card";
+import { LazyImage } from "@/components/ui/lazy-image";
 import { homeQuery } from "@/lib/queries";
 import { howItWorks } from "@/lib/content";
 import heroImage from "@/assets/hero-drape.jpg";
@@ -59,7 +60,7 @@ function Index() {
           </div>
           <div className="relative mx-auto w-full max-w-sm md:max-w-none">
             <div className="aspect-square overflow-hidden rounded-full bg-blush shadow-[0_30px_80px_-30px_rgba(120,50,60,0.35)]">
-              <img
+              <LazyImage
                 src={heroImage}
                 alt="Handwoven textile in blush tones"
                 className="h-full w-full object-cover"
@@ -96,13 +97,12 @@ function Index() {
                 idx === 0 ? "aspect-[16/11] md:row-span-2 md:aspect-auto" : "aspect-[16/11] sm:aspect-[16/10]"
               }`}
             >
-              <img
+              <LazyImage
                 src={cat.image}
                 alt={cat.name}
-                loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+              <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
               <div className="relative flex h-full flex-col justify-end p-5 text-primary-foreground sm:p-6 md:p-8">
                 <span className="mb-2 inline-flex w-fit rounded-full bg-background/85 px-3 py-1 text-[10px] uppercase tracking-widest text-primary">
                   {cat.tagline}

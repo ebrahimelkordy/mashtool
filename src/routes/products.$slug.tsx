@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Sparkles, Truck, Star } from "lucide-react";
 import { SiteLayout, SectionHeading, PrimaryButton } from "@/components/site/site-layout";
 import { ProductCard } from "@/components/site/product-card";
+import { LazyImage } from "@/components/ui/lazy-image";
 import { productQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -80,7 +81,7 @@ function ProductDetail() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
           <div>
             <div className="aspect-[4/5] overflow-hidden rounded-3xl bg-blush-soft">
-              <img
+              <LazyImage
                 src={product.images[imageIndex]}
                 alt={product.name}
                 className="h-full w-full object-cover"
@@ -96,7 +97,7 @@ function ProductDetail() {
                       imageIndex === i ? "ring-2 ring-primary" : "opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt="" className="h-full w-full object-cover" />
+                    <LazyImage src={img} alt="" className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>

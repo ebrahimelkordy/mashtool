@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { Product } from "@/lib/data/types";
+import { LazyImage } from "@/components/ui/lazy-image";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
@@ -9,14 +10,13 @@ export function ProductCard({ product }: { product: Product }) {
       className="group block"
     >
       <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-blush-soft">
-        <img
+        <LazyImage
           src={product.images[0]}
           alt={product.name}
-          loading="lazy"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {product.badge && (
-          <span className="absolute left-3 top-3 rounded-full bg-background/85 px-3 py-1 text-[10px] uppercase tracking-widest text-primary backdrop-blur sm:left-4 sm:top-4">
+          <span className="absolute left-3 top-3 z-20 rounded-full bg-background/85 px-3 py-1 text-[10px] uppercase tracking-widest text-primary backdrop-blur sm:left-4 sm:top-4">
             {product.badge}
           </span>
         )}

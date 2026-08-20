@@ -44,3 +44,5 @@ coverage/
 !public/favicon.ico
 !public/robots.txt
 !src/assets/*
+
+.vercel
