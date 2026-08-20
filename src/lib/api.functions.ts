@@ -70,7 +70,7 @@ export const getCategory = createServerFn({ method: "GET" })
   });
 
 export const submitOrder = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         type: z.enum(["standard", "bespoke"]),
@@ -100,11 +100,11 @@ export const submitOrder = createServerFn({ method: "POST" })
   });
 
 export const trackOrder = createServerFn({ method: "GET" })
-  .inputValidator((input: unknown) => z.object({ orderNumber: z.string().min(3) }).parse(input))
+  .validator((input: unknown) => z.object({ orderNumber: z.string().min(3) }).parse(input))
   .handler(({ data }) => repo.getOrderByNumber(data.orderNumber));
 
 export const uploadPaymentProof = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         orderNumber: z.string().min(3),
@@ -124,7 +124,7 @@ export const uploadPaymentProof = createServerFn({ method: "POST" })
   });
 
 export const submitMessage = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         name: z.string().min(2).max(120),
@@ -141,7 +141,7 @@ export const submitMessage = createServerFn({ method: "POST" })
 export const adminSession = createServerFn({ method: "GET" }).handler(() => readAdminSession());
 
 export const adminLogin = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => z.object({ passcode: z.string().min(1) }).parse(input))
+  .validator((input: unknown) => z.object({ passcode: z.string().min(1) }).parse(input))
   .handler(async ({ data }) => ({ ok: await signInAdmin(data.passcode) }));
 
 export const adminLogout = createServerFn({ method: "POST" }).handler(async () => {
@@ -155,14 +155,14 @@ export const adminStats = createServerFn({ method: "GET" }).handler(async () => 
 });
 
 export const adminOrders = createServerFn({ method: "GET" })
-  .inputValidator((input: unknown) => z.object({ status: z.string().optional() }).parse(input ?? {}))
+  .validator((input: unknown) => z.object({ status: z.string().optional() }).parse(input ?? {}))
   .handler(async ({ data }) => {
     await assertAdmin();
     return repo.listOrders((data.status ?? "all") as "all");
   });
 
 export const adminOrderDetail = createServerFn({ method: "GET" })
-  .inputValidator((input: unknown) => z.object({ id: z.string() }).parse(input))
+  .validator((input: unknown) => z.object({ id: z.string() }).parse(input))
   .handler(async ({ data }) => {
     await assertAdmin();
     const order = await repo.getOrderById(data.id);
@@ -174,7 +174,7 @@ export const adminOrderDetail = createServerFn({ method: "GET" })
   });
 
 export const adminUpdateOrder = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         id: z.string(),
@@ -209,7 +209,7 @@ export const adminProducts = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const adminSaveProduct = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         id: z.string().nullish(),
@@ -234,7 +234,7 @@ export const adminSaveProduct = createServerFn({ method: "POST" })
   });
 
 export const adminDeleteProduct = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => z.object({ id: z.string() }).parse(input))
+  .validator((input: unknown) => z.object({ id: z.string() }).parse(input))
   .handler(async ({ data }) => {
     await assertAdmin();
     return { ok: await repo.deleteProduct(data.id) };
@@ -246,7 +246,7 @@ export const adminMessages = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const adminMarkMessage = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z.object({ id: z.string(), read: z.boolean() }).parse(input),
   )
   .handler(async ({ data }) => {
@@ -255,7 +255,7 @@ export const adminMarkMessage = createServerFn({ method: "POST" })
   });
 
 export const adminDeleteMessage = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => z.object({ id: z.string() }).parse(input))
+  .validator((input: unknown) => z.object({ id: z.string() }).parse(input))
   .handler(async ({ data }) => {
     await assertAdmin();
     return { ok: await repo.deleteMessage(data.id) };
@@ -264,7 +264,7 @@ export const adminDeleteMessage = createServerFn({ method: "POST" })
 /* ------------------------------ admin uploads ----------------------------- */
 
 export const adminUploadImage = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         fileName: z.string().min(1).max(200),
@@ -287,7 +287,7 @@ export const adminSettings = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const adminUpdateSettings = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({
         adminNotificationEmail: z.string().email().or(z.literal("")),
