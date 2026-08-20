@@ -25,7 +25,7 @@ const optionSchema = z.object({
 export const getCategories = createServerFn({ method: "GET" }).handler(() => repo.listCategories());
 
 export const getProducts = createServerFn({ method: "GET" })
-  .inputValidator((input: unknown) =>
+  .validator((input: unknown) =>
     z
       .object({ categorySlug: z.string().optional(), featured: z.boolean().optional() })
       .parse(input ?? {}),
@@ -33,7 +33,7 @@ export const getProducts = createServerFn({ method: "GET" })
   .handler(({ data }) => repo.listProducts(data));
 
 export const getProductBySlug = createServerFn({ method: "GET" })
-  .inputValidator((input: unknown) => z.object({ slug: z.string() }).parse(input))
+  .validator((input: unknown) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const product = await repo.getProductBySlug(data.slug);
     if (!product) return { product: null, related: [], testimonials: [] };
@@ -59,7 +59,7 @@ export const getPublicSettings = createServerFn({ method: "GET" }).handler(async
 });
 
 export const getCategory = createServerFn({ method: "GET" })
-  .inputValidator((input: unknown) => z.object({ slug: z.string() }).parse(input))
+  .validator((input: unknown) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const categories = await repo.listCategories();
     const category = categories.find((c) => c.slug === data.slug) ?? null;

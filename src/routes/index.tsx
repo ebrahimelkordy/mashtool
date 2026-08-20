@@ -68,7 +68,7 @@ function Index() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <div className="absolute bottom-2 left-0 w-56 rounded-2xl bg-card p-4 shadow-lg sm:bottom-8 sm:w-64 sm:p-5 md:-left-10">
+            <div className="hidden md:flex absolute bottom-2 left-0 w-56 rounded-2xl bg-card p-4 shadow-lg sm:bottom-8 sm:w-64 sm:p-5 md:-left-10">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blush">
                   <BadgeCheck className="h-4 w-4 text-primary" />
