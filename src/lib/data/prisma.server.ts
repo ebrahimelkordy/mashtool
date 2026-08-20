@@ -2,7 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
-const DATABASE_URL = process.env.DATABASE_URL ?? '';
+const DEFAULT_DB_URL = 'postgres://4983c5767ae886b854ceea0915db482689508791e8efd08b74a8dbfe04b8a733:sk_G5P830zWwu0bijwUyhDsK@pooled.db.prisma.io:5432/postgres?sslmode=require';
+const DATABASE_URL = process.env.DATABASE_URL || DEFAULT_DB_URL;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -18,9 +19,19 @@ function getPgPool(): pg.Pool | null {
   const pool = new pg.Pool({
     connectionString: DATABASE_URL,
     ssl: { rejectUnauthorized: false },
-    max: 1, // Minimize active connections to respect Prisma Data Platform limits
-    idleTimeoutMillis: 5000,
-    connectionTimeoutMillis: 5000,
+    max: 10,
+    idleTimeoutMillis: 2000, // Close idle connections quickly before server proxy drops them
+    connectionTimeoutMillis: 10000,
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 3000,
+  });
+
+  // Catch idle client errors so dead sockets are discarded cleanly without crashing queries
+  pool.on('error', (err) => {
+    // Silent warn for idle socket disconnects
+    if (!err.message?.includes('closed') && !err.message?.includes('terminated')) {
+      console.warn('pg pool idle client event:', err.message);
+    }
   });
   
   globalThis.__pgPool = pool;

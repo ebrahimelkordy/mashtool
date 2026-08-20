@@ -39,7 +39,27 @@ function isSupabaseReady(): boolean {
 
 // Prisma availability check
 function isPrismaReady(): boolean {
-  return !!(process.env.DATABASE_URL);
+  return true;
+}
+
+// Automatic retry helper for serverless database proxies that reset idle connections
+async function withPrismaRetry<T>(fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (err: any) {
+    if (
+      err?.code === 'P1017' ||
+      err?.message?.includes('Connection terminated') ||
+      err?.message?.includes('ConnectionClosed') ||
+      err?.message?.includes('closed the connection') ||
+      err?.message?.includes('socket')
+    ) {
+      console.warn('Prisma query connection reset, retrying cleanly...');
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      return await fn();
+    }
+    throw err;
+  }
 }
 
 /* ----------------------------- In-Memory Fallback ---------------------------- */
@@ -308,7 +328,7 @@ async function withTimeout<T>(promise: Promise<T>, ms = 3000): Promise<T | typeo
 export async function listCategories(): Promise<Category[]> {
   if (isPrismaReady()) {
     try {
-      const rows = await prismaDb.category.findMany({ orderBy: { createdAt: 'asc' } });
+      const rows = await withPrismaRetry(() => prismaDb.category.findMany({ orderBy: { createdAt: 'asc' } }));
       if (rows && rows.length > 0) {
         return rows.map((c: { id: string; slug: string; name: string; tagline: string; description: string; image: string }) => ({
           id: c.id,
@@ -352,14 +372,16 @@ export async function listProducts(opts?: {
 }): Promise<Product[]> {
   if (isPrismaReady()) {
     try {
-      const rows = await prismaDb.product.findMany({
-        where: {
-          ...(opts?.includeInactive ? {} : { active: true }),
-          ...(opts?.categorySlug ? { categorySlug: opts.categorySlug } : {}),
-          ...(opts?.featured !== undefined ? { featured: opts.featured } : {}),
-        },
-        orderBy: { createdAt: 'asc' },
-      });
+      const rows = await withPrismaRetry(() =>
+        prismaDb.product.findMany({
+          where: {
+            ...(opts?.includeInactive ? {} : { active: true }),
+            ...(opts?.categorySlug ? { categorySlug: opts.categorySlug } : {}),
+            ...(opts?.featured !== undefined ? { featured: opts.featured } : {}),
+          },
+          orderBy: { createdAt: 'asc' },
+        }),
+      );
       if (rows && Array.isArray(rows)) {
         return rows.map((p) => ({
           id: p.id,
@@ -409,7 +431,7 @@ export async function getProductById(id: string): Promise<Product | null> {
 export async function listTestimonials(): Promise<Testimonial[]> {
   if (isPrismaReady()) {
     try {
-      const rows = await prismaDb.testimonial.findMany({ orderBy: { createdAt: 'asc' } });
+      const rows = await withPrismaRetry(() => prismaDb.testimonial.findMany({ orderBy: { createdAt: 'asc' } }));
       if (rows && rows.length > 0) {
         return rows.map((t) => ({
           id: t.id,
@@ -442,10 +464,12 @@ export async function getOrderById(id: string): Promise<Order | null> {
 export async function listOrders(status?: OrderStatus | "all"): Promise<Order[]> {
   if (isPrismaReady()) {
     try {
-      const rows = await prismaDb.order.findMany({
-        where: status && status !== 'all' ? { status } : {},
-        orderBy: { createdAt: 'desc' },
-      });
+      const rows = await withPrismaRetry(() =>
+        prismaDb.order.findMany({
+          where: status && status !== 'all' ? { status } : {},
+          orderBy: { createdAt: 'desc' },
+        }),
+      );
       if (rows && Array.isArray(rows)) {
         return rows.map((o) => ({
           id: o.id,
@@ -484,7 +508,7 @@ export async function listOrders(status?: OrderStatus | "all"): Promise<Order[]>
 export async function listMessages(): Promise<Message[]> {
   if (isPrismaReady()) {
     try {
-      const rows = await prismaDb.message.findMany({ orderBy: { createdAt: 'desc' } });
+      const rows = await withPrismaRetry(() => prismaDb.message.findMany({ orderBy: { createdAt: 'desc' } }));
       return rows.map((m) => ({
         id: m.id,
         name: m.name,
@@ -508,7 +532,7 @@ export async function listMessages(): Promise<Message[]> {
 export async function getSettings(): Promise<Settings> {
   if (isPrismaReady()) {
     try {
-      const s = await prismaDb.setting.findUnique({ where: { id: 'main' } });
+      const s = await withPrismaRetry(() => prismaDb.setting.findUnique({ where: { id: 'main' } }));
       if (s) {
         return {
           adminNotificationEmail: memStore.settings.adminNotificationEmail,
