@@ -54,7 +54,7 @@ async function main() {
   console.log('✅ Testimonials seeded (3)');
 
   // Settings
-  await prisma.setting.upsert({ where: { id: 'main' }, create: { id: 'main', whatsapp: '+201001112233', instagram: '@mashtool.atelier' }, update: { whatsapp: '+201001112233', instagram: '@mashtool.atelier' } });
+  await prisma.setting.upsert({ where: { id: 'main' }, create: { id: 'main', whatsapp: '+201117252662', instagram: '@mashtool.atelier' }, update: { whatsapp: '+201117252662', instagram: '@mashtool.atelier' } });
   console.log('✅ Settings seeded');
 
   console.log('\n🎉 Mashtool database seeding complete (Crochet & Crafts theme)!');

@@ -21,7 +21,7 @@ function Header() {
           to="/"
           className="flex min-w-0 items-center gap-3 font-serif text-xl tracking-tight text-primary sm:text-2xl md:text-3xl"
         >
-          <img src="/logo.png" alt="Mystic Loom" className="h-9 w-auto object-contain md:h-11" />
+          <img src="/logo.png" alt="Mashtool" className="h-9 w-auto object-contain md:h-11" />
           <span className="truncate">{siteConfig.name}</span>
         </Link>
         <nav className="hidden items-center justify-center gap-8 md:flex lg:gap-10">

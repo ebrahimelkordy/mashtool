@@ -67,14 +67,16 @@ function OurStory() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
-        <div className="relative overflow-hidden rounded-3xl bg-primary p-10 text-primary-foreground md:p-16">
-          <LazyImage src={threads} alt="Ethereal fibers" className="absolute inset-0 h-full w-full object-cover opacity-20" />
-          <div className="relative max-w-lg">
-            <span className="text-xs uppercase tracking-[0.2em] opacity-80">Our Pledge</span>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl">Feminine Empowerment</h2>
-            <p className="mt-4 leading-relaxed opacity-90">
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+          <div>
+            <span className="text-xs uppercase tracking-[0.2em] text-primary">Our Pledge</span>
+            <h2 className="mt-3 font-serif text-3xl text-foreground md:text-4xl">Feminine Empowerment</h2>
+            <p className="mt-4 leading-relaxed text-muted-foreground">
               We believe in creating sustainable livelihoods for artisan women. Every purchase directly supports independent makers, preserving traditional heritage crochet skills for future generations.
             </p>
+          </div>
+          <div className="aspect-[4/3] overflow-hidden rounded-3xl">
+            <LazyImage src={threads} alt="Ethereal fibers" className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
@@ -89,16 +91,20 @@ function OurStory() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28">
-        <div className="relative overflow-hidden rounded-3xl bg-blush p-10 text-center md:p-16">
-          <LazyImage src={cords} alt="The final spell" className="absolute inset-0 h-full w-full object-cover opacity-15" />
-          <h3 className="font-serif text-2xl text-foreground">The Artisan's Touch</h3>
-          <p className="mt-3 text-sm leading-relaxed text-foreground/75">
-            Handcrafted with precision. The slight variations in tension are not flaws, but the unique
-            signature of the human hand—a reminder that magic is alive and imperfectly beautiful.
-          </p>
-          <button className="mt-6 rounded-full border border-primary/40 px-6 py-2 text-sm text-primary transition-colors hover:bg-primary/5">
-            Discover Bespoke
-          </button>
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+          <div className="aspect-[4/3] overflow-hidden rounded-3xl md:order-2">
+            <LazyImage src={cords} alt="The final spell" className="h-full w-full object-cover" />
+          </div>
+          <div className="md:order-1">
+            <h3 className="font-serif text-3xl text-foreground md:text-4xl">The Artisan's Touch</h3>
+            <p className="mt-4 leading-relaxed text-muted-foreground">
+              Handcrafted with precision. The slight variations in tension are not flaws, but the unique
+              signature of the human hand—a reminder that magic is alive and imperfectly beautiful.
+            </p>
+            <button className="mt-6 rounded-full border border-primary/40 px-6 py-2 text-sm text-primary transition-colors hover:bg-primary/5">
+              Discover Bespoke
+            </button>
+          </div>
         </div>
       </section>
     </SiteLayout>
