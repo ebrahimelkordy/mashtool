@@ -47,8 +47,8 @@ function AdminLayout() {
     <div className="min-h-screen bg-blush-soft">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
-          <Link to="/" className="font-serif text-xl text-primary sm:text-2xl">
-            Mystic Loom
+          <Link to="/" className="font-serif text-lg text-primary">
+            Mashtool
           </Link>
           <span className="hidden text-xs uppercase tracking-[0.2em] text-muted-foreground sm:inline">
             Atelier

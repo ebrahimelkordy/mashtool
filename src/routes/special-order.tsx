@@ -10,9 +10,9 @@ import { submitOrder, uploadPaymentProof } from "@/lib/api.functions";
 export const Route = createFileRoute("/special-order")({
   head: () => ({
     meta: [
-      { title: "Bespoke Commission — Mystic Loom" },
+      { title: "Bespoke Commission — Mashtool" },
       { name: "description", content: "Commission a one-of-a-kind woven textile. Share your vision and a reference image." },
-      { property: "og:title", content: "Bespoke Commission — Mystic Loom" },
+      { property: "og:title", content: "Bespoke Commission — Mashtool" },
       { property: "og:description", content: "Commission a one-of-a-kind textile." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

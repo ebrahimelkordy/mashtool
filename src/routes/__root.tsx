@@ -78,24 +78,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Mashtool — Quality & Trust Market" },
+      { title: "Mashtool — Handwoven Elegance & Bespoke Atelier" },
       {
         name: "description",
         content:
-          "Handcrafted products and bespoke orders delivered to your doorstep.",
+          "Handcrafted tapestries, macramé art, and bespoke woven textiles delivered to your sanctuary.",
       },
-      { name: "author", content: "Mashtool" },
-      { property: "og:title", content: "Mashtool — Quality & Trust Market" },
+      { name: "author", content: "Mashtool Atelier" },
+      { property: "og:title", content: "Mashtool — Handwoven Elegance & Bespoke Atelier" },
       {
         property: "og:description",
-        content: "Handcrafted products and bespoke orders delivered to your doorstep.",
+        content: "Handcrafted tapestries and bespoke textiles designed to bring serene luxury to your sacred space.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Mashtool — Quality & Trust Market" },
+      { name: "twitter:title", content: "Mashtool — Handwoven Elegance & Bespoke Atelier" },
       { name: "twitter:description", content: "Handcrafted tapestries and bespoke textiles designed to bring serene luxury to your sacred space." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e6cbc24c-aff2-4433-befb-847895c1c97e/id-preview-a6e44e9f--ba857689-375a-4cd7-8c57-9934c28c48dd.lovable.app-1784663574402.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e6cbc24c-aff2-4433-befb-847895c1c97e/id-preview-a6e44e9f--ba857689-375a-4cd7-8c57-9934c28c48dd.lovable.app-1784663574402.png" },
+      { property: "og:image", content: "/logo.png" },
+      { name: "twitter:image", content: "/logo.png" },
     ],
     links: [
       {
@@ -103,6 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

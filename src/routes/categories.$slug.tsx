@@ -11,16 +11,16 @@ export const Route = createFileRoute("/categories/$slug")({
     if (!category) {
       return {
         meta: [
-          { title: "Collection not found — Mystic Loom" },
+          { title: "Collection not found — Mashtool" },
           { name: "robots", content: "noindex" },
         ],
       };
     }
     return {
       meta: [
-        { title: `${category.name} — Mystic Loom` },
+        { title: `${category.name} — Mashtool` },
         { name: "description", content: category.description },
-        { property: "og:title", content: `${category.name} — Mystic Loom` },
+        { property: "og:title", content: `${category.name} — Mashtool` },
         { property: "og:description", content: category.description },
       ],
     };

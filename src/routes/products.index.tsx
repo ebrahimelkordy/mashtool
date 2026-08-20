@@ -13,12 +13,12 @@ export const Route = createFileRoute("/products/")({
   },
   head: () => ({
     meta: [
-      { title: "Collections — Mystic Loom" },
+      { title: "Collections — Mashtool" },
       {
         name: "description",
-        content: "Browse handcrafted crochet, macrame and woven textiles from Mystic Loom.",
+        content: "Browse handcrafted crochet, macrame and woven textiles from Mashtool.",
       },
-      { property: "og:title", content: "Collections — Mystic Loom" },
+      { property: "og:title", content: "Collections — Mashtool" },
       { property: "og:description", content: "Handcrafted textiles, made to order." },
     ],
   }),

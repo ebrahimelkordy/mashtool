@@ -9,14 +9,14 @@ import cords from "@/assets/cords-shadow.jpg";
 export const Route = createFileRoute("/our-story")({
   head: () => ({
     meta: [
-      { title: "Our Story — Mystic Loom" },
+      { title: "Our Story — Mashtool" },
       {
         name: "description",
         content:
-          "Woven with intention, bound in the ethereal. The philosophy and ritual behind every Mystic Loom piece.",
+          "Woven with intention, bound in beauty. The philosophy and ritual behind every Mashtool piece.",
       },
-      { property: "og:title", content: "Our Story — Mystic Loom" },
-      { property: "og:description", content: "Woven with intention. Bound in the ethereal." },
+      { property: "og:title", content: "Our Story — Mashtool" },
+      { property: "og:description", content: "Woven with intention." },
     ],
   }),
   component: OurStory,
@@ -34,7 +34,7 @@ function OurStory() {
               Tailored with Grace.
             </h1>
             <p className="mt-6 max-w-md leading-relaxed text-muted-foreground">
-              At Mystic Loom, every creation tells a story of craftsmanship and feminine elegance. Our atelier is dedicated to turning natural cotton and merino wool into timeless textile art pieces that transform your sanctuary.
+              At Mashtool, every creation tells a story of craftsmanship and feminine elegance. Our atelier is dedicated to turning natural cotton and merino wool into timeless textile art pieces that transform your sanctuary.
             </p>
           </div>
           <div className="aspect-square overflow-hidden rounded-3xl">

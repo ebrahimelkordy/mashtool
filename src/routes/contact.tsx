@@ -11,10 +11,10 @@ import { usePublicSettings } from "@/hooks/use-settings";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Bespoke & Contact — Mystic Loom" },
-      { name: "description", content: "Reach out to the Mystic Loom studio. Send a missive and let us weave your vision." },
-      { property: "og:title", content: "Bespoke & Contact — Mystic Loom" },
-      { property: "og:description", content: "Send a missive to the Mystic Loom studio." },
+      { title: "Bespoke & Contact — Mashtool" },
+      { name: "description", content: "Reach out to the Mashtool studio. Send a missive and let us weave your vision." },
+      { property: "og:title", content: "Bespoke & Contact — Mashtool" },
+      { property: "og:description", content: "Send a missive to the Mashtool studio." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

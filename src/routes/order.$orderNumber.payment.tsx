@@ -11,9 +11,9 @@ import { usePublicSettings } from "@/hooks/use-settings";
 export const Route = createFileRoute("/order/$orderNumber/payment")({
   head: ({ params }) => ({
     meta: [
-      { title: `Payment — ${params.orderNumber} — Mystic Loom` },
+      { title: `Payment — ${params.orderNumber} — Mashtool` },
       { name: "robots", content: "noindex" },
-      { name: "description", content: "Upload your transfer receipt to complete your Mystic Loom order." },
+      { name: "description", content: "Upload your transfer receipt to complete your Mashtool order." },
     ],
   }),
   component: PaymentPage,

@@ -10,7 +10,7 @@ import { usePublicSettings } from "@/hooks/use-settings";
 export const Route = createFileRoute("/order/confirmation/$orderNumber")({
   head: ({ params }) => ({
     meta: [
-      { title: `Order ${params.orderNumber} — Mystic Loom` },
+      { title: `Order ${params.orderNumber} — Mashtool` },
       { name: "robots", content: "noindex" },
       { name: "description", content: "Your request has been received. We'll respond within one day." },
     ],

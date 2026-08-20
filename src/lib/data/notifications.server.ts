@@ -54,7 +54,7 @@ function orderHtml(order: Order) {
   <body>
     <div class="container">
       <div class="header">
-        <h1>🌸 Mystic Loom Atelier</h1>
+        <h1>🌸 Mashtool Atelier</h1>
         <p>${escapeHtml(title)}</p>
         <span class="badge">${escapeHtml(order.orderNumber)}</span>
       </div>
@@ -115,7 +115,7 @@ function orderHtml(order: Order) {
       </div>
 
       <div class="footer">
-        هذا إشعار آلي فور وصول طلب جديد على متجر Mystic Loom اليدوي.
+        هذا إشعار آلي فور وصول طلب جديد على متجر Mashtool اليدوي.
       </div>
     </div>
   </body>

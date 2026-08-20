@@ -13,13 +13,13 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "Mystic Loom — Woven with Ethereal Magic" },
+      { title: "Mashtool — Woven with Ethereal Magic" },
       {
         name: "description",
         content:
-          "Handcrafted tapestries and bespoke textiles designed to bring serene luxury to your sacred space.",
+          "Handcrafted tapestries, macramé art, and bespoke woven textiles made to order.",
       },
-      { property: "og:title", content: "Mystic Loom — Woven with Ethereal Magic" },
+      { property: "og:title", content: "Mashtool — Woven with Ethereal Magic" },
       { property: "og:description", content: "Handcrafted tapestries and bespoke textiles designed to bring serene luxury to your sacred space." },
     ],
   }),

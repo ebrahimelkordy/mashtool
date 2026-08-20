@@ -12,14 +12,14 @@ export const Route = createFileRoute("/products/$slug")({
     const product = loaderData?.product;
     if (!product) {
       return {
-        meta: [{ title: "Piece not found — Mystic Loom" }, { name: "robots", content: "noindex" }],
+        meta: [{ title: "Piece not found — Mashtool" }, { name: "robots", content: "noindex" }],
       };
     }
     return {
       meta: [
-        { title: `${product.name} — Mystic Loom` },
+        { title: `${product.name} — Mashtool` },
         { name: "description", content: product.shortDescription },
-        { property: "og:title", content: `${product.name} — Mystic Loom` },
+        { property: "og:title", content: `${product.name} — Mashtool` },
         { property: "og:description", content: product.shortDescription },
       ],
     };

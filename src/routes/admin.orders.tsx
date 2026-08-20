@@ -83,7 +83,7 @@ function AdminOrders() {
               Notification.requestPermission().then((perm) => {
                 if (perm === "granted") {
                   toast.success("Web Notifications Enabled! You will be alerted when new orders arrive.");
-                  new Notification("Mystic Loom Atelier", {
+                  new Notification("Mashtool Atelier", {
                     body: "Order Notification Alert System Enabled Successfully!",
                     icon: "/logo.png",
                   });

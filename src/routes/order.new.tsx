@@ -18,9 +18,9 @@ export const Route = createFileRoute("/order/new")({
   },
   head: () => ({
     meta: [
-      { title: "Request a Piece — Mystic Loom" },
-      { name: "description", content: "Send a request for a handcrafted Mystic Loom piece." },
-      { property: "og:title", content: "Request a Piece — Mystic Loom" },
+      { title: "Request a Piece — Mashtool" },
+      { name: "description", content: "Send a request for a handcrafted Mashtool piece." },
+      { property: "og:title", content: "Request a Piece — Mashtool" },
       { property: "og:description", content: "Every piece is woven to order." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

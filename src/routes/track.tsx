@@ -11,9 +11,9 @@ import { usePublicSettings } from "@/hooks/use-settings";
 export const Route = createFileRoute("/track")({
   head: () => ({
     meta: [
-      { title: "Track Your Loom — Mystic Loom" },
+      { title: "Track Your Loom — Mashtool" },
       { name: "robots", content: "noindex" },
-      { name: "description", content: "Track the status of your Mystic Loom order." },
+      { name: "description", content: "Track the status of your Mashtool order." },
     ],
   }),
   component: TrackPage,
