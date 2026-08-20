@@ -28,8 +28,8 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           <h3 className="mt-1 font-serif text-lg text-foreground sm:text-xl">{product.name}</h3>
         </div>
-        <div className="whitespace-nowrap pt-1 text-sm text-primary">
-          from ${product.priceFrom}
+        <div className="whitespace-nowrap pt-1 text-xs font-medium tracking-wide text-primary/80">
+          Priced Upon Request
         </div>
       </div>
     </Link>

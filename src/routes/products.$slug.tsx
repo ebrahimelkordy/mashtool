@@ -110,7 +110,9 @@ function ProductDetail() {
             <h1 className="mt-4 font-serif text-3xl leading-tight text-foreground sm:text-4xl md:text-5xl">
               {product.name}
             </h1>
-            <div className="mt-4 font-serif text-2xl text-primary">from ${product.priceFrom}</div>
+            <div className="mt-4 font-serif text-xl font-medium text-primary">
+              Priced Upon Request & Order Evaluation
+            </div>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground sm:text-base">
               {product.description}
             </p>
@@ -122,7 +124,7 @@ function ProductDetail() {
                   strokeWidth={1.5}
                 />
               ))}
-              <span className="ml-1">(24 woven tales)</span>
+              <span className="ml-1">(24 artisan reviews)</span>
             </div>
             {product.options && product.options.length > 0 && (
               <div className="mt-6 space-y-4 border-t border-border pt-6">
@@ -148,7 +150,6 @@ function ProductDetail() {
                             }`}
                           >
                             {val.name}
-                            {val.priceDelta > 0 && ` (+${val.priceDelta} EGP)`}
                           </button>
                         );
                       })}
@@ -179,7 +180,7 @@ function ProductDetail() {
               </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8 space-y-3">
               <Link
                 to="/order/new"
                 search={{
@@ -189,11 +190,11 @@ function ProductDetail() {
                 className="block sm:inline-block w-full sm:w-auto"
               >
                 <PrimaryButton className="w-full sm:w-auto text-center justify-center py-3.5 px-8 text-base">
-                  Order Now — Total: {calculatedPrice} EGP
+                  Request Piece & Quote 🎯
                 </PrimaryButton>
               </Link>
               <p className="mt-3 text-xs text-muted-foreground">
-                Estimated lead time: {product.leadTimeDays}. Final price confirmed after review.
+                Estimated lead time: {product.leadTimeDays}. Exact price quoted after order review.
               </p>
             </div>
             <div className="mt-8 space-y-3 border-t border-border pt-6 text-sm md:mt-10">
