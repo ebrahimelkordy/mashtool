@@ -1,5 +1,4 @@
 import { useState, type ImgHTMLAttributes } from "react";
-import heroDrape from "@/assets/hero-drape.jpg";
 
 interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string;
@@ -9,18 +8,19 @@ export function LazyImage({
   src,
   alt = "",
   className = "",
-  fallbackSrc = heroDrape,
+  fallbackSrc = "/images/hero-drape.jpg",
   ...props
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
+  const finalSrc = hasError || !src ? fallbackSrc : src;
+
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {/* Yarn-weaving themed skeleton loader */}
-      {!isLoaded && !hasError && (
+      {/* Yarn-weaving skeleton loader (visible only while loading) */}
+      {!isLoaded && (
         <div className="absolute inset-0 z-10 animate-pulse bg-gradient-to-tr from-rose-50/50 via-blush-soft/40 to-rose-100/50 flex items-center justify-center">
-          {/* Subtle Knitted grid / weaving micro-pattern overlay */}
           <div 
             className="absolute inset-0 opacity-10" 
             style={{
@@ -31,22 +31,21 @@ export function LazyImage({
               backgroundSize: '12px 12px'
             }}
           />
-          {/* Decorative spinning thread/yarn icon representing knitting */}
-          <div className="relative w-8 h-8 rounded-full border-2 border-primary/20 border-t-primary animate-spin" />
+          <div className="relative w-7 h-7 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
         </div>
       )}
 
       <img
-        src={hasError ? fallbackSrc : src}
+        src={finalSrc}
         alt={alt}
-        loading="lazy"
+        loading="eager"
         decoding="async"
         onLoad={() => setIsLoaded(true)}
         onError={() => {
           setHasError(true);
           setIsLoaded(true);
         }}
-        className={`h-full w-full object-cover transition-opacity duration-500 ${
+        className={`h-full w-full object-cover transition-opacity duration-300 ${
           isLoaded ? "opacity-100" : "opacity-0"
         }`}
         {...props}

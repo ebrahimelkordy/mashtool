@@ -63,7 +63,7 @@ function Index() {
           <div className="relative mx-auto w-full max-w-sm md:max-w-none order-1 md:order-2">
             <div className="aspect-square overflow-hidden rounded-full bg-blush shadow-[0_30px_80px_-30px_rgba(120,50,60,0.35)]">
               <LazyImage
-                src={heroImage}
+                src="/images/hero-drape.jpg"
                 alt="Hand-knitted crochet flowers and crafts"
                 className="h-full w-full object-cover"
               />

@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Sparkles, Sun } from "lucide-react";
 import { SiteLayout } from "@/components/site/site-layout";
 import { LazyImage } from "@/components/ui/lazy-image";
-import storyHero from "@/assets/story-hero.jpg";
-import hands from "@/assets/artisan-hands.jpg";
-import threads from "@/assets/threads.jpg";
-import cords from "@/assets/cords-shadow.jpg";
+const storyHero = "/images/story-hero.jpg";
+const hands = "/images/artisan-hands.jpg";
+const threads = "/images/threads.jpg";
+const cords = "/images/cords-shadow.jpg";
 
 export const Route = createFileRoute("/our-story")({
   head: () => ({
