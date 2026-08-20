@@ -1,4 +1,4 @@
-import { useState, type ImgHTMLAttributes } from "react";
+import { useState, useEffect, useRef, type ImgHTMLAttributes } from "react";
 import { resolveImageUrl } from "@/lib/images";
 
 interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -14,9 +14,17 @@ export function LazyImage({
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const resolved = resolveImageUrl(typeof src === "string" ? src : undefined, fallbackSrc);
   const finalSrc = hasError ? resolveImageUrl(fallbackSrc) : resolved;
+
+  // Fix hydration issue where images loaded before React hydration don't fire onLoad
+  useEffect(() => {
+    if (imgRef.current?.complete) {
+      setIsLoaded(true);
+    }
+  }, [finalSrc]);
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
@@ -38,9 +46,10 @@ export function LazyImage({
       )}
 
       <img
+        ref={imgRef}
         src={finalSrc}
         alt={alt}
-        loading="eager"
+        loading={props.loading || "lazy"}
         decoding="async"
         onLoad={() => setIsLoaded(true)}
         onError={() => {
