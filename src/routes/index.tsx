@@ -35,17 +35,18 @@ function Index() {
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-to-b from-blush-soft via-background to-background">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-5 py-14 sm:px-6 md:grid-cols-2 md:gap-12 md:px-10 md:py-28">
-          <div>
+          {/* Text block: Shown second on mobile, first on desktop */}
+          <div className="order-2 md:order-1">
             <div className="mb-4 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-primary sm:text-xs">
               <Sparkles className="h-3.5 w-3.5" /> Curated Seasonal Atelier
             </div>
             <h1 className="font-serif text-[2.5rem] leading-[1.05] text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-              Handwoven Elegance,
+              Crochet Elegance,
               <br />
               <em className="not-italic text-primary" style={{ fontStyle: "italic" }}>Crafted for You</em>
             </h1>
             <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Discover unique handcrafted tapestries, macramé art, and home accessories woven with organic fibers to infuse warmth into your refined living spaces.
+              Discover unique handcrafted crochet flower bouquets, custom accessories, and home decor woven with premium threads to infuse warmth into your refined living spaces.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
               <Link to="/products" className="w-full sm:w-auto">
@@ -58,11 +59,12 @@ function Index() {
               </Link>
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-sm md:max-w-none">
+          {/* Image block: Shown first on mobile, second on desktop */}
+          <div className="relative mx-auto w-full max-w-sm md:max-w-none order-1 md:order-2">
             <div className="aspect-square overflow-hidden rounded-full bg-blush shadow-[0_30px_80px_-30px_rgba(120,50,60,0.35)]">
               <LazyImage
                 src={heroImage}
-                alt="Handwoven textile in blush tones"
+                alt="Hand-knitted crochet flowers and crafts"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -72,8 +74,8 @@ function Index() {
                   <BadgeCheck className="h-4 w-4 text-primary" />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-serif text-base text-foreground">Artisan Crafted</div>
-                  <div className="text-xs text-muted-foreground">Handwoven with intention and grace.</div>
+                  <div className="font-serif text-base text-foreground">Artisan Knitted</div>
+                  <div className="text-xs text-muted-foreground">Handcrafted with premium threads and grace.</div>
                 </div>
               </div>
             </div>

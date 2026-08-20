@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  tagline     String    @default("")
+  description String    @default("")
+  image       String    @default("")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  name             String
+  categoryId       String?  @map("category_id")
+  category         String
+  categorySlug     String   @map("category_slug")
+  priceFrom        Float    @default(0) @map("price_from")
+  leadTimeDays     String   @default("1–2 weeks") @map("lead_time_days")
+  shortDescription String   @default("") @map("short_description")
+  description      String   @default("")
+  images           Json     @default("[]")
+  options          Json     @default("[]")
+  featured         Boolean  @default(false)
+  badge            String?
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  cat              Category? @relation(fields: [categoryId], references: [id])
+
+  @@map("products")
+}
+
+model Order {
+  id               String    @id @default(cuid())
+  orderNumber      String    @unique @map("order_number")
+  type             String
+  productId        String?   @map("product_id")
+  productName      String?   @map("product_name")
+  customerName     String    @map("customer_name")
+  phone            String
+  whatsapp         String?
+  address          String?
+  quantity         Int       @default(1)
+  notes            String?
+  referenceImages  Json      @default("[]") @map("reference_images")
+  selectedOptions  Json      @default("[]") @map("selected_options")
+  unitPrice        Float?    @map("unit_price")
+  total            Float?
+  status           String    @default("new")
+  quotedPrice      Float?    @map("quoted_price")
+  paymentProofUrl  String?   @map("payment_proof_url")
+  estimatedDelivery DateTime? @map("estimated_delivery")
+  adminNote        String?   @map("admin_note")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  @@map("orders")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  subject   String   @default("")
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("messages")
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  initials  String   @default("")
+  quote     String
+  rating    Int      @default(5)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
+
+model Setting {
+  id        String   @id @default("main")
+  whatsapp  String   @default("")
+  instagram String   @default("")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}

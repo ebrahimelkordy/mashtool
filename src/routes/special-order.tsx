@@ -53,8 +53,8 @@ function SpecialOrder() {
             base64,
           },
         });
-        if (res?.url) {
-          uploadedUrls.push(res.url);
+        if (res && (res as any)?.url) {
+          uploadedUrls.push((res as any).url);
         }
       }
 

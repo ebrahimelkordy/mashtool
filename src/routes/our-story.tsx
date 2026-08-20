@@ -30,12 +30,12 @@ function OurStory() {
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
           <div>
             <h1 className="font-serif text-5xl leading-tight text-primary md:text-6xl">
-              Woven with Passion.
+              Knitted with Passion.
               <br />
               Tailored with Grace.
             </h1>
             <p className="mt-6 max-w-md leading-relaxed text-muted-foreground">
-              At Mashtool, every creation tells a story of craftsmanship and feminine elegance. Our atelier is dedicated to turning natural cotton and merino wool into timeless textile art pieces that transform your sanctuary.
+              At Mashtool, every creation tells a story of craftsmanship and feminine elegance. Our atelier is dedicated to turning premium threads and luxury cotton yarns into timeless crochet art pieces that transform your sanctuary.
             </p>
           </div>
           <div className="aspect-square overflow-hidden rounded-3xl">
@@ -56,10 +56,10 @@ function OurStory() {
                 The Artisan Atelier
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                The creative process begins long before the first knot is tied. We carefully source the finest ethically gathered fibers—organic cottons, shimmering silks, and soft merino wools that bring warmth and texture to your living space.
+                The creative process begins long before the first stitch is knitted. We carefully source the finest ethically gathered fibers—organic cottons, soft merino wool, and vibrant yarns that bring warmth and texture to your living space.
               </p>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                Each piece is meticulously crafted by skilled women artisans. We blend traditional knotting techniques with modern minimalist aesthetics, ensuring every tapestry and decor accessory is truly unique.
+                Each piece is meticulously crafted by skilled women artisans. We blend traditional crochet techniques with modern minimalist aesthetics, ensuring every flower bouquet and accessory is truly unique.
               </p>
             </div>
           </div>
@@ -73,7 +73,7 @@ function OurStory() {
             <span className="text-xs uppercase tracking-[0.2em] opacity-80">Our Pledge</span>
             <h2 className="mt-3 font-serif text-3xl md:text-4xl">Feminine Empowerment</h2>
             <p className="mt-4 leading-relaxed opacity-90">
-              We believe in creating sustainable livelihoods for artisan women. Every purchase directly supports independent makers, preserving traditional heritage textile skills for future generations.
+              We believe in creating sustainable livelihoods for artisan women. Every purchase directly supports independent makers, preserving traditional heritage crochet skills for future generations.
             </p>
           </div>
         </div>
@@ -83,7 +83,7 @@ function OurStory() {
         <div className="mx-auto max-w-7xl px-6 text-center md:px-10">
           <h2 className="font-serif text-3xl text-foreground md:text-4xl">Bespoke Commissions</h2>
           <p className="mx-auto mt-4 max-w-md leading-relaxed text-muted-foreground">
-            Have a custom space or specific vision? We collaborate directly with interior designers and homeowners to craft bespoke textile art.
+            Have a custom space or specific vision? We collaborate directly with interior designers and homeowners to craft bespoke textile and crochet art.
           </p>
         </div>
       </section>

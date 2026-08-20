@@ -21,14 +21,14 @@ export function ProductCard({ product }: { product: Product }) {
           </span>
         )}
       </div>
-      <div className="mt-4 flex items-start justify-between gap-3">
+      <div className="mt-4 flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
         <div className="min-w-0">
-          <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
+          <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
             {product.category}
           </div>
-          <h3 className="mt-1 font-serif text-lg text-foreground sm:text-xl">{product.name}</h3>
+          <h3 className="mt-0.5 font-serif text-base text-foreground sm:text-lg leading-tight truncate group-hover:text-primary transition-colors">{product.name}</h3>
         </div>
-        <div className="whitespace-nowrap pt-1 text-xs font-medium tracking-wide text-primary/80">
+        <div className="whitespace-nowrap text-xs font-semibold tracking-wide text-primary/95 sm:pt-1">
           Priced Upon Request
         </div>
       </div>

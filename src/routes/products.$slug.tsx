@@ -150,7 +150,7 @@ function ProductDetail() {
                                 : "border-border bg-card text-foreground hover:border-primary/50"
                             }`}
                           >
-                            {val.name}
+                            {val.label || (val as any).name}
                           </button>
                         );
                       })}
@@ -184,10 +184,11 @@ function ProductDetail() {
             <div className="mt-8 space-y-3">
               <Link
                 to="/order/new"
-                search={{
-                  productId: product.id,
-                  quantity: quantity > 1 ? quantity : undefined,
-                }}
+                  search={(prev: any) => ({
+                    ...prev,
+                    productId: product.id,
+                    quantity: quantity > 1 ? quantity : undefined,
+                  })}
                 className="block sm:inline-block w-full sm:w-auto"
               >
                 <PrimaryButton className="w-full sm:w-auto text-center justify-center py-3.5 px-8 text-base">

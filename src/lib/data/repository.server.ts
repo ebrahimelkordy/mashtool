@@ -14,6 +14,7 @@ import threads from "@/assets/threads.jpg";
 import artisanHands from "@/assets/artisan-hands.jpg";
 
 import { supabase, getSupabaseClient } from "./supabase.server";
+import { prismaDb } from "./prisma.server";
 import type {
   Category,
   DashboardStats,
@@ -31,12 +32,14 @@ import { ORDER_STATUSES } from "./types";
 
 export const heroImage = heroDrape;
 
-// Use actual client check — works with hardcoded keys in supabase.server.ts
-// We try the client; if it throws or returns null we fall back to memory store.
-let _supabaseReady: boolean | null = null;
+// Prisma is active — reads/writes go directly to PostgreSQL via Prisma Data Platform
 function isSupabaseReady(): boolean {
-  // Use memory store seed for rich local product display until production database sync
-  return false;
+  return false; // Supabase disabled; using Prisma instead
+}
+
+// Prisma availability check
+function isPrismaReady(): boolean {
+  return !!(process.env.DATABASE_URL);
 }
 
 /* ----------------------------- In-Memory Fallback ---------------------------- */
@@ -54,26 +57,26 @@ function seed(): Store {
   const categories: Category[] = [
     {
       id: "c1",
-      slug: "macrame-wall-hangings",
-      name: "Macramé Wall Tapestries",
-      tagline: "Artisan Wall Accents",
-      description: "Handcrafted macramé wall hangings made with premium natural cotton fibers to add warm sophistication to your space.",
+      slug: "crochet-bouquets",
+      name: "Crochet Flower Bouquets",
+      tagline: "Everlasting Knitted Blooms",
+      description: "Premium hand-knit flower bouquets crafted with luxury cotton threads. Perfect gifts that never wither.",
       image: macrame,
     },
     {
       id: "c2",
-      slug: "plant-hangers",
-      name: "Botanical Plant Hangers",
-      tagline: "Green Living Touches",
-      description: "Durable and stylish bohemian plant hangers crafted to elevate your indoor greenery with refined elegance.",
+      slug: "crochet-accessories",
+      name: "Chic Crochet Accessories",
+      tagline: "Hand-knitted Daily Essentials",
+      description: "Elegant hand-crocheted bags, bookmarks, and lifestyle accessories designed with precision.",
       image: cords,
     },
     {
       id: "c3",
-      slug: "home-decor",
-      name: "Luxury Home Accessories",
-      tagline: "Details & Accent Decor",
-      description: "Handwoven coasters, table runners, and artisanal home accessories designed with timeless craftsmanship.",
+      slug: "crochet-decor",
+      name: "Cozy Crochet Decor",
+      tagline: "Soft Artisan Touches",
+      description: "Coasters, table mats, and warm home accents knitted by hand to elevate your space.",
       image: herbBag,
     },
   ];
@@ -81,24 +84,24 @@ function seed(): Store {
   const products: Product[] = [
     {
       id: "p1",
-      slug: "serene-horizon-macrame-tapestry",
-      name: "Serene Horizon Macramé Tapestry",
+      slug: "royal-crochet-rose-bouquet",
+      name: "Royal Crochet Rose Bouquet",
       categoryId: "c1",
-      category: "Macramé Wall Tapestries",
-      categorySlug: "macrame-wall-hangings",
+      category: "Crochet Flower Bouquets",
+      categorySlug: "crochet-bouquets",
       priceFrom: 450,
-      leadTimeDays: "1–2 weeks",
-      shortDescription: "Handwoven blush merino tapestry with intricate geometric knotting.",
-      description: "Crafted in our studio using ethically sourced organic cotton yarn and rose gold metallic accents. Designed to create a calming focal point in your bedroom or living space.",
+      leadTimeDays: "3–5 days",
+      shortDescription: "Luxurious bouquet of 7 hand-knitted red and pink roses.",
+      description: "Beautifully crafted using organic cotton yarns. Includes a elegant wrapping paper and customizable message card.",
       images: [macrame, wallArt],
       options: [
         {
           id: "opt-size",
-          name: "Dimensions",
+          name: "Bouquet Size",
           required: true,
           values: [
-            { id: "v-m", label: "Medium (60×40 cm)", priceDelta: 0 },
-            { id: "v-l", label: "Large (90×60 cm)", priceDelta: 200 },
+            { id: "v-m", label: "Medium (7 Roses)", priceDelta: 0 },
+            { id: "v-l", label: "Large (12 Roses)", priceDelta: 250 },
           ],
         },
       ],
@@ -110,24 +113,25 @@ function seed(): Store {
     },
     {
       id: "p2",
-      slug: "rosewood-botanical-hanger",
-      name: "Rosewood Botanical Hanger",
-      categoryId: "c2",
-      category: "Botanical Plant Hangers",
-      categorySlug: "plant-hangers",
-      priceFrom: 320,
-      leadTimeDays: "1–2 weeks",
-      shortDescription: "Deep rose and terracotta hand-braided cord hanger.",
-      description: "An elegant solution for displaying indoor botanical accents, hand-knotted with reinforced organic cotton cords for heavy planter support.",
-      images: [cords, roseThrow],
+      slug: "eternal-tulip-pot",
+      name: "Eternal Crochet Tulip Pot",
+      categoryId: "c1",
+      category: "Crochet Flower Bouquets",
+      categorySlug: "crochet-bouquets",
+      priceFrom: 180,
+      leadTimeDays: "2–3 days",
+      shortDescription: "Cute desk-sized crochet tulip pot in pastel colors.",
+      description: "Brighten up your study desk or office with this charming everlasting tulip pot. Knitted with soft, premium acrylic and cotton blend.",
+      images: [cords],
       options: [
         {
-          id: "opt-length",
-          name: "Hanging Length",
-          required: false,
+          id: "opt-color",
+          name: "Flower Color",
+          required: true,
           values: [
-            { id: "v-standard", label: "Standard (80 cm)", priceDelta: 0 },
-            { id: "v-extended", label: "Extended (120 cm)", priceDelta: 60 },
+            { id: "v-pink", label: "Pastel Pink", priceDelta: 0 },
+            { id: "v-yellow", label: "Sunny Yellow", priceDelta: 0 },
+            { id: "v-purple", label: "Lavender Purple", priceDelta: 0 },
           ],
         },
       ],
@@ -139,16 +143,16 @@ function seed(): Store {
     },
     {
       id: "p3",
-      slug: "artisanal-woven-tote-runner",
-      name: "Artisanal Woven Tote & Runner",
-      categoryId: "c3",
-      category: "Luxury Home Accessories",
-      categorySlug: "home-decor",
-      priceFrom: 180,
-      leadTimeDays: "3–5 days",
-      shortDescription: "Hand-crocheted net tote and decorative woven runner.",
-      description: "Functional handwoven art for everyday living, crafted with natural unbleached fibers and reinforced wooden accents.",
-      images: [herbBag, threads],
+      slug: "boho-crochet-tote-bag",
+      name: "Boho Chic Crochet Tote Bag",
+      categoryId: "c2",
+      category: "Chic Crochet Accessories",
+      categorySlug: "crochet-accessories",
+      priceFrom: 380,
+      leadTimeDays: "5–7 days",
+      shortDescription: "Sturdy, hand-knitted boho style shoulder bag.",
+      description: "A spacious and fashionable tote bag knitted with thick cotton cords, featuring premium interior lining and comfortable handles.",
+      images: [herbBag],
       options: [],
       featured: true,
       badge: "New Arrival",
@@ -158,115 +162,38 @@ function seed(): Store {
     },
     {
       id: "p4",
-      slug: "bohemian-fringe-wall-mirror",
-      name: "Bohemian Fringe Macramé Mirror",
-      categoryId: "c3",
-      category: "Luxury Home Accessories",
-      categorySlug: "home-decor",
-      priceFrom: 520,
-      leadTimeDays: "2–3 weeks",
-      shortDescription: "Circular accent wall mirror with hand-knotted cotton fringe border.",
-      description: "A breathtaking statement mirror surrounded by intricate radial macramé patterns. Ideal for entryway vanity or bedroom aesthetic enhancement.",
-      images: [wallArt, macrame],
-      options: [
-        {
-          id: "opt-mirror-diameter",
-          name: "Mirror Size",
-          required: true,
-          values: [
-            { id: "m-40", label: "Compact (40 cm total)", priceDelta: 0 },
-            { id: "m-60", label: "Grand (65 cm total)", priceDelta: 280 },
-          ],
-        },
-      ],
-      featured: true,
-      badge: "Featured",
+      slug: "daisy-chain-bookmark",
+      name: "Daisy Chain Crochet Bookmark",
+      categoryId: "c2",
+      category: "Chic Crochet Accessories",
+      categorySlug: "crochet-accessories",
+      priceFrom: 45,
+      leadTimeDays: "1–2 days",
+      shortDescription: "Delicate floral bookmark hand-knitted for book lovers.",
+      description: "Keep your place with this elegant chain of daisies. Made with extra-fine threads for a flat, beautiful design.",
+      images: [threads],
+      options: [],
+      featured: false,
+      badge: "Cozy Gift",
       active: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     },
     {
       id: "p5",
-      slug: "double-tier-plant-hanger",
-      name: "Tiered Canopy Plant Hanger",
-      categoryId: "c2",
-      category: "Botanical Plant Hangers",
-      categorySlug: "plant-hangers",
-      priceFrom: 410,
-      leadTimeDays: "1–2 weeks",
-      shortDescription: "Two-tiered handwoven macramé planter holder with brass rings.",
-      description: "Maximize your vertical space with this double-tier plant hanger, woven with thick 4mm unbleached natural cotton cords.",
-      images: [cords, heroDrape],
+      slug: "artisan-blossom-coasters",
+      name: "Artisan Blossom Crochet Coasters",
+      categoryId: "c3",
+      category: "Cozy Crochet Decor",
+      categorySlug: "crochet-decor",
+      priceFrom: 90,
+      leadTimeDays: "2 days",
+      shortDescription: "Set of 4 flower-shaped cup coasters in natural shades.",
+      description: "Add a warm, cottagecore aesthetic to your coffee table. Heat-resistant and machine-washable cotton.",
+      images: [artisanHands],
       options: [],
       featured: false,
-      badge: "Limited Edition",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p6",
-      slug: "velvet-woven-throw-blanket",
-      name: "Blush Velvet & Linen Throw Blanket",
-      categoryId: "c3",
-      category: "Luxury Home Accessories",
-      categorySlug: "home-decor",
-      priceFrom: 680,
-      leadTimeDays: "2–3 weeks",
-      shortDescription: "Ultra-soft woven lap blanket with hand-twisted tassel trim.",
-      description: "Indulge in pure comfort with this heirloom-quality throw blanket. Hand-woven on traditional looms with pastel blush and ivory threads.",
-      images: [roseThrow, artisanHands],
-      options: [],
-      featured: true,
-      badge: "Signature",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p7",
-      slug: "celestial-geometric-tapestry",
-      name: "Celestial Geometric Wall Tapestry",
-      categoryId: "c1",
-      category: "Macramé Wall Tapestries",
-      categorySlug: "macrame-wall-hangings",
-      priceFrom: 890,
-      leadTimeDays: "3–4 weeks",
-      shortDescription: "Grand architectural wall tapestry mounted on polished teak wood.",
-      description: "Our largest studio tapestry piece featuring complex diamond weaving and layered fringe drops. A true luxury investment piece.",
-      images: [heroDrape, macrame],
-      options: [
-        {
-          id: "opt-teak-finish",
-          name: "Wood Finish",
-          required: true,
-          values: [
-            { id: "w-natural", label: "Natural Driftwood", priceDelta: 0 },
-            { id: "w-dark", label: "Polished Teak Wood", priceDelta: 150 },
-          ],
-        },
-      ],
-      featured: true,
-      badge: "Masterpiece",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p8",
-      slug: "handwoven-table-runner-set",
-      name: "Artisanal Table Runner & Coasters Set",
-      categoryId: "c3",
-      category: "Luxury Home Accessories",
-      categorySlug: "home-decor",
-      priceFrom: 290,
-      leadTimeDays: "1 week",
-      shortDescription: "Includes 1 texturized table runner and 4 matching macramé coasters.",
-      description: "Elevate your dining ritual with this handcrafted dining set. Made with liquid-repellent treated organic cotton yarns.",
-      images: [threads, herbBag],
-      options: [],
-      featured: false,
-      badge: null,
+      badge: "Home Favorite",
       active: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -281,16 +208,16 @@ function seed(): Store {
     testimonials: [
       {
         id: "t1",
-        name: "Sarah Lorne",
-        initials: "SL",
-        quote: "The tapestry transformed our living space into a calm, sacred sanctuary.",
+        name: "Yasmine K.",
+        initials: "YK",
+        quote: "The rose bouquet is stunning! My mother was so happy with it. Excellent knitting quality.",
         rating: 5,
       },
       {
         id: "t2",
-        name: "Elena Rostova",
-        initials: "ER",
-        quote: "Impeccable craftsmanship. You can feel the intention woven into every knot.",
+        name: "Farida A.",
+        initials: "FA",
+        quote: "Delicate and cute tulip pot. It sits on my desk and makes me smile every morning. Thank you Mashtool!",
         rating: 5,
       },
     ],
@@ -379,13 +306,30 @@ async function withTimeout<T>(promise: Promise<T>, ms = 3000): Promise<T | typeo
 }
 
 export async function listCategories(): Promise<Category[]> {
+  if (isPrismaReady()) {
+    try {
+      const rows = await prismaDb.category.findMany({ orderBy: { createdAt: 'asc' } });
+      if (rows && rows.length > 0) {
+        return rows.map((c: { id: string; slug: string; name: string; tagline: string; description: string; image: string }) => ({
+          id: c.id,
+          slug: c.slug,
+          name: c.name,
+          tagline: c.tagline,
+          description: c.description,
+          image: c.image,
+        }));
+      }
+    } catch (err) {
+      console.error("Prisma error in listCategories:", err);
+    }
+  }
   if (isSupabaseReady()) {
     try {
       const result = await withTimeout(supabase.from("categories").select("*"));
       if (result === TIMEOUT) throw new Error('Supabase timeout');
       const { data, error } = result as { data: any; error: any };
       if (!error && data && data.length > 0) {
-        return data.map((c) => ({
+        return data.map((c: any) => ({
           id: c.id,
           slug: c.slug,
           name: c.name,
@@ -406,41 +350,39 @@ export async function listProducts(opts?: {
   featured?: boolean;
   includeInactive?: boolean;
 }): Promise<Product[]> {
-  if (isSupabaseReady()) {
+  if (isPrismaReady()) {
     try {
-      let query = supabase.from("products").select("*");
-      if (query && typeof query.eq === "function") {
-        if (!opts?.includeInactive) query = query.eq("active", true);
-        if (opts?.categorySlug) query = query.eq("category_slug", opts.categorySlug);
-        if (opts?.featured !== undefined) query = query.eq("featured", opts.featured);
-      }
-
-      const result = await withTimeout(query);
-      if (result === TIMEOUT) throw new Error('Supabase timeout');
-      const { data, error } = result as { data: any; error: any };
-      if (!error && data && Array.isArray(data)) {
-        return data.map((p) => ({
+      const rows = await prismaDb.product.findMany({
+        where: {
+          ...(opts?.includeInactive ? {} : { active: true }),
+          ...(opts?.categorySlug ? { categorySlug: opts.categorySlug } : {}),
+          ...(opts?.featured !== undefined ? { featured: opts.featured } : {}),
+        },
+        orderBy: { createdAt: 'asc' },
+      });
+      if (rows && Array.isArray(rows)) {
+        return rows.map((p) => ({
           id: p.id,
           slug: p.slug,
           name: p.name,
-          categoryId: p.category_id,
-          category: p.category_name,
-          categorySlug: p.category_slug,
-          priceFrom: Number(p.price_from || p.priceFrom || 0),
-          leadTimeDays: p.lead_time_days || p.leadTimeDays || "3-5 أيام",
-          shortDescription: p.short_description || p.shortDescription || "",
-          description: p.description || "",
-          images: p.images || [],
-          options: p.options || [],
+          categoryId: (p.categoryId ?? '') as string,
+          category: p.category,
+          categorySlug: p.categorySlug,
+          priceFrom: Number(p.priceFrom || 0),
+          leadTimeDays: p.leadTimeDays || '1–2 weeks',
+          shortDescription: p.shortDescription || '',
+          description: p.description || '',
+          images: (p.images as string[]) || [],
+          options: (p.options as any[]) || [],
           featured: Boolean(p.featured),
-          badge: p.badge || null,
-          active: p.active !== undefined ? Boolean(p.active) : true,
-          createdAt: p.created_at || new Date().toISOString(),
-          updatedAt: p.updated_at || new Date().toISOString(),
+          badge: p.badge ?? null,
+          active: Boolean(p.active),
+          createdAt: p.createdAt.toISOString(),
+          updatedAt: p.updatedAt.toISOString(),
         }));
       }
     } catch (err) {
-      console.error("Supabase query error in listProducts:", err);
+      console.error('Prisma error in listProducts:', err);
     }
   }
 
@@ -465,22 +407,20 @@ export async function getProductById(id: string): Promise<Product | null> {
 }
 
 export async function listTestimonials(): Promise<Testimonial[]> {
-  if (isSupabaseReady()) {
+  if (isPrismaReady()) {
     try {
-      const result = await withTimeout(supabase.from("testimonials").select("*"));
-      if (result === TIMEOUT) throw new Error('Supabase timeout');
-      const { data, error } = result as { data: any; error: any };
-      if (!error && data && Array.isArray(data)) {
-        return data.map((t) => ({
+      const rows = await prismaDb.testimonial.findMany({ orderBy: { createdAt: 'asc' } });
+      if (rows && rows.length > 0) {
+        return rows.map((t) => ({
           id: t.id,
-          name: t.name || t.author || "Anonymous",
-          initials: t.initials || (t.name || "A").slice(0, 2).toUpperCase(),
+          name: t.name,
+          initials: t.initials || t.name.slice(0, 2).toUpperCase(),
           quote: t.quote,
-          rating: t.rating || 5,
+          rating: t.rating,
         }));
       }
     } catch (err) {
-      console.error("Supabase query error in listTestimonials:", err);
+      console.error('Prisma error in listTestimonials:', err);
     }
   }
   return clone(memStore.testimonials);
@@ -500,45 +440,40 @@ export async function getOrderById(id: string): Promise<Order | null> {
 }
 
 export async function listOrders(status?: OrderStatus | "all"): Promise<Order[]> {
-  if (isSupabaseReady()) {
+  if (isPrismaReady()) {
     try {
-      let query = supabase.from("orders").select("*");
-      if (query && typeof query.order === "function") {
-        query = query.order("created_at", { ascending: false });
-      }
-      if (status && status !== "all" && query && typeof query.eq === "function") {
-        query = query.eq("status", status);
-      }
-
-      const { data, error } = await query;
-      if (!error && data && Array.isArray(data)) {
-        return data.map((o) => ({
+      const rows = await prismaDb.order.findMany({
+        where: status && status !== 'all' ? { status } : {},
+        orderBy: { createdAt: 'desc' },
+      });
+      if (rows && Array.isArray(rows)) {
+        return rows.map((o) => ({
           id: o.id,
-          orderNumber: o.order_number || o.orderNumber,
-          type: o.type,
-          productId: o.product_id || null,
-          productName: o.product_name || null,
-          customerName: o.customer_name || o.customerName,
+          orderNumber: o.orderNumber,
+          type: o.type as 'standard' | 'bespoke',
+          productId: o.productId ?? null,
+          productName: o.productName ?? null,
+          customerName: o.customerName,
           phone: o.phone,
-          whatsapp: o.whatsapp || null,
-          address: o.address || null,
-          quantity: o.quantity || 1,
-          notes: o.notes || null,
-          referenceImages: o.reference_images || [],
-          selectedOptions: [],
-          unitPrice: null,
-          total: o.quoted_price != null ? Number(o.quoted_price) : null,
-          status: (o.status || "new") as OrderStatus,
-          quotedPrice: o.quoted_price != null ? Number(o.quoted_price) : null,
-          paymentProofUrl: o.payment_proof_url || null,
-          estimatedDelivery: o.estimated_delivery || null,
-          adminNote: o.admin_note || null,
-          createdAt: o.created_at || new Date().toISOString(),
-          updatedAt: o.updated_at || o.created_at || new Date().toISOString(),
+          whatsapp: o.whatsapp ?? null,
+          address: o.address ?? null,
+          quantity: o.quantity,
+          notes: o.notes ?? null,
+          referenceImages: (o.referenceImages as string[]) || [],
+          selectedOptions: (o.selectedOptions as any[]) || [],
+          unitPrice: o.unitPrice ?? null,
+          total: o.total ?? null,
+          status: (o.status || 'new') as OrderStatus,
+          quotedPrice: o.quotedPrice ?? null,
+          paymentProofUrl: o.paymentProofUrl ?? null,
+          estimatedDelivery: o.estimatedDelivery?.toISOString().split('T')[0] ?? null,
+          adminNote: o.adminNote ?? null,
+          createdAt: o.createdAt.toISOString(),
+          updatedAt: o.updatedAt.toISOString(),
         }));
       }
     } catch (err) {
-      console.error("Supabase query error in listOrders:", err);
+      console.error('Prisma error in listOrders:', err);
     }
   }
 
@@ -547,21 +482,21 @@ export async function listOrders(status?: OrderStatus | "all"): Promise<Order[]>
 }
 
 export async function listMessages(): Promise<Message[]> {
-  if (isSupabaseReady()) {
-    const { data, error } = await supabase
-      .from("messages")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (!error && data) {
-      return data.map((m) => ({
+  if (isPrismaReady()) {
+    try {
+      const rows = await prismaDb.message.findMany({ orderBy: { createdAt: 'desc' } });
+      return rows.map((m) => ({
         id: m.id,
         name: m.name,
-        email: m.email,
+        email: m.email ?? '',
+        phone: m.phone ?? '',
         subject: m.subject,
         body: m.body,
-        read: Boolean(m.read),
-        createdAt: m.created_at,
+        read: m.read,
+        createdAt: m.createdAt.toISOString(),
       }));
+    } catch (err) {
+      console.error('Prisma error in listMessages:', err);
     }
   }
 
@@ -571,12 +506,49 @@ export async function listMessages(): Promise<Message[]> {
 /* -------------------------------- Settings -------------------------------- */
 
 export async function getSettings(): Promise<Settings> {
+  if (isPrismaReady()) {
+    try {
+      const s = await prismaDb.setting.findUnique({ where: { id: 'main' } });
+      if (s) {
+        return {
+          adminNotificationEmail: memStore.settings.adminNotificationEmail,
+          whatsappNumber: s.whatsapp,
+          whatsappDisplay: s.whatsapp,
+          contactEmail: memStore.settings.contactEmail,
+          instagramUrl: s.instagram,
+          addressLine: memStore.settings.addressLine,
+          instapayHandle: memStore.settings.instapayHandle,
+          vodafoneCashNumber: memStore.settings.vodafoneCashNumber,
+          updatedAt: s.updatedAt.toISOString(),
+        };
+      }
+    } catch (err) {
+      console.error('Prisma error in getSettings:', err);
+    }
+  }
   return clone(memStore.settings);
 }
 
 export async function updateSettings(
   patch: Partial<Omit<Settings, "updatedAt">>,
 ): Promise<Settings> {
+  if (isPrismaReady()) {
+    try {
+      const s = await prismaDb.setting.upsert({
+        where: { id: 'main' },
+        create: { id: 'main', whatsapp: (patch as any).whatsappNumber ?? (patch as any).whatsapp ?? '', instagram: (patch as any).instagramUrl ?? (patch as any).instagram ?? '' },
+        update: { whatsapp: (patch as any).whatsappNumber ?? (patch as any).whatsapp ?? undefined, instagram: (patch as any).instagramUrl ?? (patch as any).instagram ?? undefined },
+      });
+      const base = clone(memStore.settings);
+      base.whatsappNumber = s.whatsapp;
+      base.whatsappDisplay = s.whatsapp;
+      base.instagramUrl = s.instagram;
+      base.updatedAt = s.updatedAt.toISOString();
+      return base;
+    } catch (err) {
+      console.error('Prisma error in updateSettings:', err);
+    }
+  }
   Object.assign(memStore.settings, patch, { updatedAt: new Date().toISOString() });
   return clone(memStore.settings);
 }
@@ -646,6 +618,57 @@ export async function createOrder(input: {
   const orderNum = nextOrderNumber(input.type);
   const total = unitPrice === null ? null : unitPrice * quantity;
   const iso = new Date().toISOString();
+
+  if (isPrismaReady()) {
+    try {
+      const created = await prismaDb.order.create({
+        data: {
+          orderNumber: orderNum,
+          type: input.type,
+          productId: product?.id ?? null,
+          productName: product?.name ?? (input.type === 'bespoke' ? 'Bespoke commission' : null),
+          customerName: input.customerName,
+          phone: input.phone,
+          whatsapp: input.whatsapp ?? null,
+          address: input.address ?? null,
+          quantity,
+          notes: input.notes ?? null,
+          referenceImages: input.referenceImages ?? [],
+          selectedOptions: selectedOptions as any,
+          unitPrice,
+          total,
+          status: 'new',
+          quotedPrice: null,
+        },
+      });
+      return {
+        id: created.id,
+        orderNumber: created.orderNumber,
+        type: created.type as 'standard' | 'bespoke',
+        productId: created.productId ?? null,
+        productName: created.productName ?? null,
+        customerName: created.customerName,
+        phone: created.phone,
+        whatsapp: created.whatsapp ?? null,
+        address: created.address ?? null,
+        quantity: created.quantity,
+        notes: created.notes ?? null,
+        referenceImages: (created.referenceImages as string[]) || [],
+        selectedOptions,
+        unitPrice,
+        total,
+        status: (created.status || 'new') as OrderStatus,
+        quotedPrice: created.quotedPrice ?? null,
+        paymentProofUrl: created.paymentProofUrl ?? null,
+        estimatedDelivery: null,
+        adminNote: created.adminNote ?? null,
+        createdAt: created.createdAt.toISOString(),
+        updatedAt: created.updatedAt.toISOString(),
+      };
+    } catch (err) {
+      console.error('Prisma error in createOrder:', err);
+    }
+  }
 
   if (isSupabaseReady()) {
     const { data, error } = await supabase
@@ -730,6 +753,24 @@ export async function updateOrder(
     Pick<Order, "status" | "quotedPrice" | "estimatedDelivery" | "adminNote" | "paymentProofUrl">
   >,
 ): Promise<Order | null> {
+  if (isPrismaReady()) {
+    try {
+      await prismaDb.order.update({
+        where: { id },
+        data: {
+          ...(patch.status !== undefined ? { status: patch.status } : {}),
+          ...(patch.quotedPrice !== undefined ? { quotedPrice: patch.quotedPrice, total: patch.quotedPrice } : {}),
+          ...(patch.estimatedDelivery !== undefined ? { estimatedDelivery: patch.estimatedDelivery ? new Date(patch.estimatedDelivery) : null } : {}),
+          ...(patch.adminNote !== undefined ? { adminNote: patch.adminNote } : {}),
+          ...(patch.paymentProofUrl !== undefined ? { paymentProofUrl: patch.paymentProofUrl } : {}),
+        },
+      });
+      return getOrderById(id);
+    } catch (err) {
+      console.error('Prisma error in updateOrder:', err);
+    }
+  }
+
   if (isSupabaseReady()) {
     const updateData: Record<string, unknown> = {};
     if (patch.status !== undefined) updateData["status"] = patch.status;
@@ -753,6 +794,20 @@ export async function attachPaymentProof(
   orderNumber: string,
   fileUrl: string,
 ): Promise<Order | null> {
+  if (isPrismaReady()) {
+    try {
+      const order = await prismaDb.order.findFirst({ where: { orderNumber } });
+      if (!order) return null;
+      await prismaDb.order.update({
+        where: { id: order.id },
+        data: { paymentProofUrl: fileUrl, status: 'paid' },
+      });
+      return getOrderByNumber(orderNumber);
+    } catch (err) {
+      console.error('Prisma error in attachPaymentProof:', err);
+    }
+  }
+
   if (isSupabaseReady()) {
     const { error } = await supabase
       .from("orders")
@@ -783,6 +838,31 @@ export async function createMessage(input: {
   body: string;
 }): Promise<Message> {
   const iso = new Date().toISOString();
+
+  if (isPrismaReady()) {
+    try {
+      const created = await prismaDb.message.create({
+        data: {
+          name: input.name,
+          email: input.email,
+          subject: input.subject,
+          body: input.body,
+          read: false,
+        },
+      });
+      return {
+        id: created.id,
+        name: created.name,
+        email: created.email ?? '',
+        subject: created.subject,
+        body: created.body,
+        read: created.read,
+        createdAt: created.createdAt.toISOString(),
+      };
+    } catch (err) {
+      console.error('Prisma error in createMessage:', err);
+    }
+  }
 
   if (isSupabaseReady()) {
     const { data, error } = await supabase
@@ -821,6 +901,16 @@ export async function createMessage(input: {
 }
 
 export async function markMessageRead(id: string, read: boolean): Promise<Message | null> {
+  if (isPrismaReady()) {
+    try {
+      await prismaDb.message.update({ where: { id }, data: { read } });
+      const messages = await listMessages();
+      return messages.find((m) => m.id === id) ?? null;
+    } catch (err) {
+      console.error('Prisma error in markMessageRead:', err);
+    }
+  }
+
   if (isSupabaseReady()) {
     const { error } = await supabase.from("messages").update({ read }).eq("id", id);
     if (!error) {
