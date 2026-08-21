@@ -47,15 +47,22 @@ async function withPrismaRetry<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (err: any) {
-    if (
-      err?.code === 'P1017' ||
-      err?.message?.includes('Connection terminated') ||
-      err?.message?.includes('ConnectionClosed') ||
-      err?.message?.includes('closed the connection') ||
-      err?.message?.includes('socket')
-    ) {
-      console.warn('Prisma query connection reset, retrying cleanly...');
-      await new Promise((resolve) => setTimeout(resolve, 150));
+    const msg: string = err?.message ?? '';
+    const code: string = err?.code ?? '';
+    const isRetryable =
+      code === 'P1017' ||
+      code === 'P1001' ||
+      msg.includes('Connection terminated') ||
+      msg.includes('ConnectionClosed') ||
+      msg.includes('closed the connection') ||
+      msg.includes('socket') ||
+      msg.includes('timeout') ||
+      msg.includes('ECONNRESET') ||
+      msg.includes('ETIMEDOUT') ||
+      msg.includes('connection pool');
+    if (isRetryable) {
+      console.warn('Prisma connection issue, retrying in 500ms...', code || msg.slice(0, 80));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       return await fn();
     }
     throw err;
