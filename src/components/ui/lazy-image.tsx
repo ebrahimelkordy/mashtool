@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, type ImgHTMLAttributes } from "react";
-import { resolveImageUrl } from "@/lib/images";
+import { resolveImageUrl, getBlurImageUrl } from "@/lib/images";
 
 interface LazyImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string;
+  targetWidth?: number;
 }
 
 export function LazyImage({
@@ -10,14 +11,17 @@ export function LazyImage({
   alt = "",
   className = "",
   fallbackSrc,
+  targetWidth = 650,
   ...props
 }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const resolved = resolveImageUrl(typeof src === "string" ? src : undefined, fallbackSrc);
-  const finalSrc = hasError ? resolveImageUrl(fallbackSrc) : resolved;
+  const rawSrc = typeof src === "string" ? src : undefined;
+  const blurSrc = getBlurImageUrl(rawSrc, fallbackSrc);
+  const resolved = resolveImageUrl(rawSrc, fallbackSrc, targetWidth);
+  const finalSrc = hasError ? resolveImageUrl(fallbackSrc, undefined, targetWidth) : resolved;
 
   // Fix hydration issue where images loaded before React hydration don't fire onLoad
   useEffect(() => {
@@ -27,24 +31,18 @@ export function LazyImage({
   }, [finalSrc]);
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
-      {/* Yarn-weaving skeleton loader (visible only while loading) */}
-      {!isLoaded && (
-        <div className="absolute inset-0 z-10 animate-pulse bg-gradient-to-tr from-rose-50/50 via-blush-soft/40 to-rose-100/50 flex items-center justify-center">
-          <div 
-            className="absolute inset-0 opacity-10" 
-            style={{
-              backgroundImage: `
-                linear-gradient(90deg, rgba(120,50,60,0.15) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(120,50,60,0.15) 1px, transparent 1px)
-              `,
-              backgroundSize: '12px 12px'
-            }}
-          />
-          <div className="relative w-7 h-7 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
-        </div>
-      )}
+    <div className={`relative overflow-hidden bg-blush-soft/50 ${className}`}>
+      {/* Progressive low-res blur backdrop (loads instantly, no placeholder icons) */}
+      <img
+        src={blurSrc}
+        alt=""
+        aria-hidden="true"
+        className={`absolute inset-0 h-full w-full object-cover scale-105 filter blur-lg transition-opacity duration-500 pointer-events-none ${
+          isLoaded ? "opacity-0" : "opacity-100"
+        }`}
+      />
 
+      {/* Main crisp high-res image */}
       <img
         ref={imgRef}
         src={finalSrc}
@@ -56,8 +54,8 @@ export function LazyImage({
           setHasError(true);
           setIsLoaded(true);
         }}
-        className={`h-full w-full object-cover transition-opacity duration-300 ${
-          isLoaded ? "opacity-100" : "opacity-0"
+        className={`h-full w-full object-cover transition-all duration-500 ease-out ${
+          isLoaded ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-102 blur-sm"
         }`}
         {...props}
       />

@@ -29,12 +29,14 @@ const assetMap: Record<string, string> = {
   "/src/assets/wall-art.jpg": wallArt,
 };
 
-export function resolveImageUrl(src?: string | null, fallback = heroDrape): string {
+export function resolveImageUrl(src?: string | null, fallback = heroDrape, width = 650): string {
   if (!src) return fallback;
   if (assetMap[src]) return assetMap[src];
   if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
-    if (src.includes("images.unsplash.com") && !src.includes("w=")) {
-      return `${src}${src.includes("?") ? "&" : "?"}w=800&q=75&auto=format`;
+    if (src.includes("images.unsplash.com")) {
+      // Strip any existing width/quality params and inject optimized WebP params
+      const baseUrl = src.split("?")[0];
+      return `${baseUrl}?w=${width}&q=75&auto=format&fit=crop&fm=webp`;
     }
     return src;
   }
@@ -46,6 +48,15 @@ export function resolveImageUrl(src?: string | null, fallback = heroDrape): stri
   }
   
   return fallback;
+}
+
+export function getBlurImageUrl(src?: string | null, fallback = heroDrape): string {
+  if (!src) return fallback;
+  if (src.includes("images.unsplash.com")) {
+    const baseUrl = src.split("?")[0];
+    return `${baseUrl}?w=30&q=20&blur=10&auto=format&fit=crop&fm=webp`;
+  }
+  return resolveImageUrl(src, fallback, 100);
 }
 
 export { heroDrape, storyHero, hands, threads, cords, macrame, herbBag, roseThrow, wallArt };
