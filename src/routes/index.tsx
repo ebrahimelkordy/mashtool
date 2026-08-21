@@ -65,6 +65,7 @@ function Index() {
               <LazyImage
                 src="/images/hero-drape.jpg"
                 alt="Hand-knitted crochet flowers and crafts"
+                priority={true}
                 className="h-full w-full object-cover"
               />
             </div>

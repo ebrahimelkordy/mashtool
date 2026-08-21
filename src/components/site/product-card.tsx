@@ -13,6 +13,7 @@ export function ProductCard({ product }: { product: Product }) {
         <LazyImage
           src={product.images[0]}
           alt={product.name}
+          targetWidth={400}
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {product.badge && (
