@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { adminDeleteCategory, adminSaveCategory, adminUploadImage } from "@/lib/api.functions";
 import type { Category } from "@/lib/data/types";
+import { compressImageFile } from "@/lib/images";
 import { categoriesQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/admin/categories")({
@@ -89,15 +90,15 @@ function AdminCategories() {
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file || !draft) return;
-    if (file.size > 5_000_000) {
-      toast.error("Image file size should be less than 5MB");
+    if (file.size > 15_000_000) {
+      toast.error("Image file size should be less than 15MB");
       return;
     }
     setUploading(true);
     try {
-      const base64 = await readAsBase64(file);
+      const { base64, contentType } = await compressImageFile(file, 900, 0.75);
       const res = await adminUploadImage({
-        data: { fileName: file.name, contentType: file.type, base64 },
+        data: { fileName: file.name, contentType, base64 },
       });
       setDraft({ ...draft, image: res.url });
       toast.success("Category image uploaded");

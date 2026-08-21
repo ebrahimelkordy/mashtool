@@ -59,4 +59,49 @@ export function getBlurImageUrl(src?: string | null, fallback = heroDrape): stri
   return resolveImageUrl(src, fallback, 100);
 }
 
+export function compressImageFile(
+  file: File,
+  maxDim = 900,
+  quality = 0.75
+): Promise<{ base64: string; contentType: string; dataUrl: string }> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas context error"));
+        ctx.drawImage(img, 0, 0, width, height);
+
+        let contentType = "image/webp";
+        let dataUrl = canvas.toDataURL(contentType, quality);
+        if (!dataUrl.startsWith("data:image/webp")) {
+          contentType = "image/jpeg";
+          dataUrl = canvas.toDataURL(contentType, quality);
+        }
+
+        const base64 = dataUrl.split(",")[1] ?? "";
+        resolve({ base64, contentType, dataUrl });
+      };
+      img.onerror = () => reject(new Error("Failed to decode image file"));
+      img.src = String(e.target?.result);
+    };
+    reader.onerror = () => reject(new Error("Failed to read file"));
+    reader.readAsDataURL(file);
+  });
+}
+
 export { heroDrape, storyHero, hands, threads, cords, macrame, herbBag, roseThrow, wallArt };

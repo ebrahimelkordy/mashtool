@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 import { adminDeleteProduct, adminSaveProduct, adminUploadImage } from "@/lib/api.functions";
 import type { Product, ProductOption } from "@/lib/data/types";
+import { compressImageFile } from "@/lib/images";
 import { adminProductsQuery, categoriesQuery } from "@/lib/queries";
 
 export const Route = createFileRoute("/admin/products")({
@@ -373,13 +374,13 @@ function ImageManager({
     const uploaded: string[] = [];
     try {
       for (const file of Array.from(files)) {
-        if (file.size > 5_000_000) {
-          toast.error(`${file.name} is larger than 5MB`);
+        if (file.size > 15_000_000) {
+          toast.error(`${file.name} is larger than 15MB`);
           continue;
         }
-        const base64 = await readAsBase64(file);
+        const { base64, contentType } = await compressImageFile(file, 900, 0.75);
         const res = await adminUploadImage({
-          data: { fileName: file.name, contentType: file.type, base64 },
+          data: { fileName: file.name, contentType, base64 },
         });
         uploaded.push(res.url);
       }
