@@ -250,10 +250,10 @@ function seed(): Store {
     ],
     files: new Map(),
     settings: {
-      adminNotificationEmail: process.env["ADMIN_EMAIL"] || "robaatef41@gmail.com",
+      adminNotificationEmail: process.env["ADMIN_EMAIL"] || "mashtool0@gmail.com",
       whatsappNumber: "+201117252662",
       whatsappDisplay: "+20 11 1725 2662",
-      contactEmail: "robaatef41@gmail.com",
+      contactEmail: "mashtool0@gmail.com",
       instagramUrl: "@mashtool.atelier",
       addressLine: "Cairo, Egypt",
       instapayHandle: "mashtool@instapay",
