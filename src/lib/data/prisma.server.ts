@@ -1,6 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import PrismaClientPkg from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
+
+const PrismaClient = PrismaClientPkg.PrismaClient || PrismaClientPkg;
 
 const DEFAULT_DB_URL =
   'postgres://4983c5767ae886b854ceea0915db482689508791e8efd08b74a8dbfe04b8a733:sk_G5P830zWwu0bijwUyhDsK@pooled.db.prisma.io:5432/postgres?sslmode=require';
