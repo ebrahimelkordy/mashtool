@@ -10,7 +10,7 @@ import heroImage from "@/assets/hero-drape.jpg";
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) => {
-    context.queryClient.ensureQueryData(homeQuery);
+    return context.queryClient.ensureQueryData(homeQuery);
   },
   head: () => ({
     meta: [
