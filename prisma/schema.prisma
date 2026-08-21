@@ -43,8 +43,23 @@ model Product {
   updatedAt        DateTime @updatedAt @map("updated_at")
 
   cat              Category? @relation(fields: [categoryId], references: [id])
+  reviews          Review[]
 
   @@map("products")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  name      String
+  rating    Int      @default(5)
+  comment   String   @default("")
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
 }
 
 model Order {

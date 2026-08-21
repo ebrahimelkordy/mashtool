@@ -32,7 +32,12 @@ const assetMap: Record<string, string> = {
 export function resolveImageUrl(src?: string | null, fallback = heroDrape): string {
   if (!src) return fallback;
   if (assetMap[src]) return assetMap[src];
-  if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) return src;
+  if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
+    if (src.includes("images.unsplash.com") && !src.includes("w=")) {
+      return `${src}${src.includes("?") ? "&" : "?"}w=800&q=75&auto=format`;
+    }
+    return src;
+  }
   
   // Try matching by filename (e.g. hero-drape.jpg)
   const filename = src.split("/").pop() || "";

@@ -36,12 +36,30 @@ export const getProductBySlug = createServerFn({ method: "GET" })
   .validator((input: unknown) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const product = await repo.getProductBySlug(data.slug);
-    if (!product) return { product: null, related: [], testimonials: [] };
+    if (!product) return { product: null, related: [], testimonials: [], reviews: [] };
     const related = (await repo.listProducts({ categorySlug: product.categorySlug }))
       .filter((p) => p.id !== product.id)
       .slice(0, 3);
-    return { product, related, testimonials: await repo.listTestimonials() };
+    const reviews = await repo.listProductReviews(product.id);
+    return { product, related, testimonials: await repo.listTestimonials(), reviews };
   });
+
+export const getProductReviews = createServerFn({ method: "GET" })
+  .validator((input: unknown) => z.object({ productId: z.string() }).parse(input))
+  .handler(({ data }) => repo.listProductReviews(data.productId));
+
+export const submitReview = createServerFn({ method: "POST" })
+  .validator((input: unknown) =>
+    z
+      .object({
+        productId: z.string(),
+        name: z.string().min(2).max(80),
+        rating: z.number().int().min(1).max(5),
+        comment: z.string().min(2).max(1000),
+      })
+      .parse(input),
+  )
+  .handler(({ data }) => repo.createReview(data));
 
 export const getHomeData = createServerFn({ method: "GET" }).handler(async () => ({
   categories: await repo.listCategories(),
@@ -304,4 +322,45 @@ export const adminUpdateSettings = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     await assertAdmin();
     return repo.updateSettings(data);
+  });
+
+/* ----------------------------- admin categories --------------------------- */
+
+export const adminSaveCategory = createServerFn({ method: "POST" })
+  .validator((input: unknown) =>
+    z
+      .object({
+        id: z.string().nullish(),
+        name: z.string().min(2).max(120),
+        slug: z.string().max(120).optional(),
+        tagline: z.string().max(200).optional(),
+        description: z.string().max(2000).optional(),
+        image: z.string().optional(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    await assertAdmin();
+    return repo.upsertCategory(data);
+  });
+
+export const adminDeleteCategory = createServerFn({ method: "POST" })
+  .validator((input: unknown) => z.object({ id: z.string() }).parse(input))
+  .handler(async ({ data }) => {
+    await assertAdmin();
+    return { ok: await repo.deleteCategory(data.id) };
+  });
+
+/* ------------------------------ admin reviews ----------------------------- */
+
+export const adminReviews = createServerFn({ method: "GET" }).handler(async () => {
+  await assertAdmin();
+  return repo.adminListReviews();
+});
+
+export const adminDeleteReview = createServerFn({ method: "POST" })
+  .validator((input: unknown) => z.object({ id: z.string() }).parse(input))
+  .handler(async ({ data }) => {
+    await assertAdmin();
+    return { ok: await repo.deleteReview(data.id) };
   });

@@ -120,6 +120,16 @@ export type Testimonial = {
   rating: number;
 };
 
+export type Review = {
+  id: string;
+  productId: string;
+  name: string;
+  rating: number;
+  comment: string;
+  approved: boolean;
+  createdAt: string;
+};
+
 export type StoredFile = {
   id: string;
   fileName: string;

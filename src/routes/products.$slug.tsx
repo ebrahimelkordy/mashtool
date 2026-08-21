@@ -213,6 +213,9 @@ function ProductDetail() {
         </div>
       </section>
 
+      {/* CUSTOMER REVIEWS & RATINGS */}
+      <ProductReviewsSection productId={product.id} reviews={data.reviews || []} />
+
       <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6 md:px-10 md:py-24">
         <SectionHeading
           title="Echoes from the Loom"
@@ -251,5 +254,224 @@ function ProductDetail() {
         </section>
       )}
     </SiteLayout>
+  );
+}
+
+function ProductReviewsSection({
+  productId,
+  reviews: initialReviews,
+}: {
+  productId: string;
+  reviews: any[];
+}) {
+  const qc = useQueryClient();
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [showForm, setShowForm] = useState(false);
+
+  const reviews = initialReviews;
+  const avgRating =
+    reviews.length > 0
+      ? (reviews.reduce((acc, r) => acc + (r.rating || 5), 0) / reviews.length).toFixed(1)
+      : "5.0";
+
+  const addReview = useMutation({
+    mutationFn: () =>
+      submitReview({
+        data: { productId, name: name.trim(), rating, comment: comment.trim() },
+      }),
+    onSuccess: async () => {
+      await qc.invalidateQueries();
+      setName("");
+      setRating(5);
+      setComment("");
+      setShowForm(false);
+      toast.success("شكراً لك! تم إضافة تقييمك بنجاح");
+    },
+    onError: () => toast.error("تعذر إضافة التقييم، يرجى المحاولة مرة أخرى"),
+  });
+
+  return (
+    <section className="border-t border-border/60 bg-blush-soft/40 py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 md:px-10">
+        <div className="flex flex-wrap items-center justify-between gap-6">
+          <div>
+            <SectionHeading
+              eyebrow="Customer Reviews & Ratings"
+              title="آراء وتقييمات العملاء ⭐"
+              description="اقرأ تجارب وتقييمات محبي الكروشيه أو أضف تقييمك الخاص بهذه القطعة."
+            />
+          </div>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90"
+          >
+            {showForm ? "إلغاء التقييم" : "اكتب تقييمك الآن ✍️"}
+          </button>
+        </div>
+
+        {/* SUMMARY STATS */}
+        <div className="mt-8 flex flex-wrap items-center gap-6 rounded-2xl bg-card p-6 shadow-sm sm:p-8">
+          <div className="text-center sm:text-left">
+            <div className="font-serif text-5xl font-bold text-primary">{avgRating}</div>
+            <div className="mt-1 flex items-center justify-center gap-1 sm:justify-start">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${
+                    i < Math.round(Number(avgRating))
+                      ? "fill-primary text-primary"
+                      : "text-muted-foreground/30"
+                  }`}
+                />
+              ))}
+            </div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              بناءً على {reviews.length} تقييم حقيقي
+            </div>
+          </div>
+
+          <div className="h-12 w-px bg-border/60 hidden sm:block" />
+
+          <div className="flex-1 text-xs text-muted-foreground space-y-1">
+            <div className="flex items-center gap-2">
+              <span>الجودة والتقفيل اليدوي</span>
+              <div className="h-2 flex-1 rounded-full bg-blush overflow-hidden">
+                <div className="h-full bg-primary w-[96%]" />
+              </div>
+              <span className="font-semibold text-foreground">96%</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span>مطابقة الصور والتفاصيل</span>
+              <div className="h-2 flex-1 rounded-full bg-blush overflow-hidden">
+                <div className="h-full bg-primary w-[98%]" />
+              </div>
+              <span className="font-semibold text-foreground">98%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* WRITE REVIEW FORM */}
+        {showForm && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              addReview.mutate();
+            }}
+            className="mt-8 rounded-3xl border border-primary/20 bg-background p-6 shadow-md transition-all sm:p-8"
+          >
+            <h3 className="font-serif text-xl text-primary">إضافة تقييم جديد</h3>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                  الاسم بالكامل *
+                </label>
+                <input
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="مثال: سارة أحمد"
+                  className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm outline-none focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                  التقييم بالنجوم *
+                </label>
+                <div className="flex items-center gap-2 py-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setRating(i + 1)}
+                      className="transition-transform hover:scale-125"
+                    >
+                      <Star
+                        className={`h-7 w-7 ${
+                          i < rating ? "fill-primary text-primary" : "text-muted-foreground/30"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                  <span className="mr-2 text-sm font-semibold text-primary">{rating} من 5</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-xs uppercase tracking-wider text-muted-foreground mb-1">
+                رأيك وتجربتك مع المنتج *
+              </label>
+              <textarea
+                required
+                rows={3}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="اكتب تجربتك مع هذه القطعة الفنية..."
+                className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary"
+              />
+            </div>
+
+            <div className="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="rounded-xl border border-border px-5 py-2.5 text-sm text-muted-foreground"
+              >
+                إلغاء
+              </button>
+              <button
+                type="submit"
+                disabled={addReview.isPending || !name.trim() || !comment.trim()}
+                className="rounded-xl bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground disabled:opacity-50"
+              >
+                {addReview.isPending ? "جاري الإرسال..." : "إرسال التقييم 🌟"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* REVIEWS LIST */}
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {reviews.length === 0 ? (
+            <div className="col-span-full rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+              لا توجد تقييمات مكتوبة لهذه القطعة بعد. كن أول من يشارك رأيه!
+            </div>
+          ) : (
+            reviews.map((r) => (
+              <div key={r.id} className="flex flex-col justify-between rounded-2xl bg-card p-6 shadow-sm">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-foreground">{r.name}</span>
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-3.5 w-3.5 ${
+                            i < (r.rating || 5)
+                              ? "fill-primary text-primary"
+                              : "text-muted-foreground/30"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-foreground/80">{r.comment}</p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-border/40 text-[11px] text-muted-foreground">
+                  {new Date(r.createdAt).toLocaleDateString("ar-EG", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </section>
   );
 }

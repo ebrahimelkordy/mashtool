@@ -5,6 +5,7 @@ import {
   adminOrderDetail,
   adminOrders,
   adminProducts,
+  adminReviews,
   adminSession,
   adminSettings,
   adminStats,
@@ -12,6 +13,7 @@ import {
   getCategory,
   getHomeData,
   getProductBySlug,
+  getProductReviews,
   getProducts,
   getPublicSettings,
 } from "./api.functions";
@@ -36,6 +38,12 @@ export const productQuery = (slug: string) =>
   queryOptions({
     queryKey: ["product", slug],
     queryFn: () => getProductBySlug({ data: { slug } }),
+  });
+
+export const productReviewsQuery = (productId: string) =>
+  queryOptions({
+    queryKey: ["reviews", productId],
+    queryFn: () => getProductReviews({ data: { productId } }),
   });
 
 export const categoryQuery = (slug: string) =>
@@ -68,6 +76,11 @@ export const adminProductsQuery = queryOptions({
 export const adminMessagesQuery = queryOptions({
   queryKey: ["admin", "messages"],
   queryFn: () => adminMessages(),
+});
+
+export const adminReviewsQuery = queryOptions({
+  queryKey: ["admin", "reviews"],
+  queryFn: () => adminReviews(),
 });
 
 export const adminSettingsQuery = queryOptions({

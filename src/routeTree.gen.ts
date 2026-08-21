@@ -16,6 +16,7 @@ import { Route as OurStoryRouteImport } from './routes/our-story'
 import { Route as SpecialOrderRouteImport } from './routes/special-order'
 import { Route as TrackRouteImport } from './routes/track'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
@@ -60,6 +61,11 @@ const TrackRoute = TrackRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/our-story': typeof OurStoryRoute
   '/special-order': typeof SpecialOrderRoute
   '/track': typeof TrackRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/our-story': typeof OurStoryRoute
   '/special-order': typeof SpecialOrderRoute
   '/track': typeof TrackRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/our-story': typeof OurStoryRoute
   '/special-order': typeof SpecialOrderRoute
   '/track': typeof TrackRoute
+  '/admin/categories': typeof AdminCategoriesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/products': typeof AdminProductsRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/special-order'
     | '/track'
+    | '/admin/categories'
     | '/admin/messages'
     | '/admin/orders'
     | '/admin/products'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/special-order'
     | '/track'
+    | '/admin/categories'
     | '/admin/messages'
     | '/admin/orders'
     | '/admin/products'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/special-order'
     | '/track'
+    | '/admin/categories'
     | '/admin/messages'
     | '/admin/orders'
     | '/admin/products'
@@ -297,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/messages': {
       id: '/admin/messages'
       path: '/messages'
@@ -371,6 +390,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminProductsRoute: typeof AdminProductsRoute
@@ -378,6 +398,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCategoriesRoute: AdminCategoriesRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminProductsRoute: AdminProductsRoute,

@@ -131,4 +131,4 @@ npx vitest run
 ---
 
 Designed and crafted with passion & technical precision.  
-**Contact / Senior Software Engineering Portfolio inquiries:** [mashtool0@gmail.com](mailto:mashtool0@gmail.com)
+**Contact / Senior Software Engineering Portfolio inquiries:** [ebrahimkordy0@gmail.com](mailto:ebrahimkordy0@gmail.com)

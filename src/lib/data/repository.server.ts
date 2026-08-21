@@ -88,23 +88,31 @@ function seed(): Store {
       name: "Crochet Flower Bouquets",
       tagline: "Everlasting Knitted Blooms",
       description: "Premium hand-knit flower bouquets crafted with luxury cotton threads. Perfect gifts that never wither.",
-      image: macrame,
+      image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1200&auto=format&fit=crop",
     },
     {
       id: "c2",
       slug: "crochet-accessories",
       name: "Chic Crochet Accessories",
       tagline: "Hand-knitted Daily Essentials",
-      description: "Elegant hand-crocheted bags, bookmarks, and lifestyle accessories designed with precision.",
-      image: cords,
+      description: "Elegant hand-crocheted bags, bookmarks, keychains and lifestyle accessories designed with precision.",
+      image: "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?q=80&w=1200&auto=format&fit=crop",
     },
     {
       id: "c3",
       slug: "crochet-decor",
       name: "Cozy Crochet Decor",
       tagline: "Soft Artisan Touches",
-      description: "Coasters, table mats, and warm home accents knitted by hand to elevate your space.",
-      image: herbBag,
+      description: "Coasters, mug hugs, and warm home accents knitted by hand to elevate your living space.",
+      image: "https://images.unsplash.com/photo-1620619767323-b95a89183081?q=80&w=1200&auto=format&fit=crop",
+    },
+    {
+      id: "c4",
+      slug: "amigurumi-toys",
+      name: "Amigurumi Toys",
+      tagline: "Handmade Whimsical Friends",
+      description: "Cute, stuffed crochet toys crafted with child-safe organic yarns. Perfect companions for little ones.",
+      image: "https://images.unsplash.com/photo-1594921319760-4b893a00fde4?q=80&w=1200&auto=format&fit=crop",
     },
   ];
 
@@ -118,9 +126,12 @@ function seed(): Store {
       categorySlug: "crochet-bouquets",
       priceFrom: 450,
       leadTimeDays: "3–5 days",
-      shortDescription: "Luxurious bouquet of 7 hand-knitted red and pink roses.",
-      description: "Beautifully crafted using organic cotton yarns. Includes a elegant wrapping paper and customizable message card.",
-      images: [macrame, wallArt],
+      shortDescription: "Luxurious bouquet of 7 hand-knitted red and blush pink roses.",
+      description: "Beautifully crafted using premium organic cotton yarns. Includes elegant kraft paper wrapping and a customizable card.",
+      images: [
+        "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=1200&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=1200&auto=format&fit=crop"
+      ],
       options: [
         {
           id: "opt-size",
@@ -148,8 +159,10 @@ function seed(): Store {
       priceFrom: 180,
       leadTimeDays: "2–3 days",
       shortDescription: "Cute desk-sized crochet tulip pot in pastel colors.",
-      description: "Brighten up your study desk or office with this charming everlasting tulip pot. Knitted with soft, premium acrylic and cotton blend.",
-      images: [cords],
+      description: "Brighten up your study desk or office with this charming everlasting tulip pot. Knitted with soft acrylic & cotton blend.",
+      images: [
+        "https://images.unsplash.com/photo-1520763185298-1b434c919102?q=80&w=1200&auto=format&fit=crop"
+      ],
       options: [
         {
           id: "opt-color",
@@ -178,8 +191,10 @@ function seed(): Store {
       priceFrom: 380,
       leadTimeDays: "5–7 days",
       shortDescription: "Sturdy, hand-knitted boho style shoulder bag.",
-      description: "A spacious and fashionable tote bag knitted with thick cotton cords, featuring premium interior lining and comfortable handles.",
-      images: [herbBag],
+      description: "A spacious and fashionable tote bag knitted with thick cotton cords, featuring comfortable sturdy handles.",
+      images: [
+        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1200&auto=format&fit=crop"
+      ],
       options: [],
       featured: true,
       badge: "New Arrival",
@@ -198,7 +213,9 @@ function seed(): Store {
       leadTimeDays: "1–2 days",
       shortDescription: "Delicate floral bookmark hand-knitted for book lovers.",
       description: "Keep your place with this elegant chain of daisies. Made with extra-fine threads for a flat, beautiful design.",
-      images: [threads],
+      images: [
+        "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1200&auto=format&fit=crop"
+      ],
       options: [],
       featured: false,
       badge: "Cozy Gift",
@@ -217,10 +234,75 @@ function seed(): Store {
       leadTimeDays: "2 days",
       shortDescription: "Set of 4 flower-shaped cup coasters in natural shades.",
       description: "Add a warm, cottagecore aesthetic to your coffee table. Heat-resistant and machine-washable cotton.",
-      images: [artisanHands],
+      images: [
+        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=1200&auto=format&fit=crop"
+      ],
       options: [],
       featured: false,
       badge: "Home Favorite",
+      active: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      id: "p6",
+      slug: "sunflower-sunshine-bouquet",
+      name: "Sunflower Sunshine Crochet Bouquet",
+      categoryId: "c1",
+      category: "Crochet Flower Bouquets",
+      categorySlug: "crochet-bouquets",
+      priceFrom: 320,
+      leadTimeDays: "3 days",
+      shortDescription: "Vibrant hand-knit sunflower bouquet that spreads joy.",
+      description: "Bright yellow sunflowers knitted with dark brown centers and green stems. Brings warmth and cheerfulness.",
+      images: [
+        "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?q=80&w=1200&auto=format&fit=crop"
+      ],
+      options: [],
+      featured: true,
+      badge: "Trending",
+      active: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      id: "p7",
+      slug: "handmade-teddy-bear-amigurumi",
+      name: "Handmade Teddy Bear Amigurumi",
+      categoryId: "c4",
+      category: "Amigurumi Toys",
+      categorySlug: "amigurumi-toys",
+      priceFrom: 220,
+      leadTimeDays: "3–4 days",
+      shortDescription: "Adorable hand-knitted teddy bear toy with hypoallergenic stuffing.",
+      description: "Crafted with love using organic baby-safe cotton yarn and safety eyes. Super soft and huggable.",
+      images: [
+        "https://images.unsplash.com/photo-1559454403-b8fb88521f11?q=80&w=1200&auto=format&fit=crop"
+      ],
+      options: [],
+      featured: true,
+      badge: "Kids Love It",
+      active: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      id: "p8",
+      slug: "crochet-keychain-flower-charm",
+      name: "Mini Flower Keychain Charm",
+      categoryId: "c2",
+      category: "Chic Crochet Accessories",
+      categorySlug: "crochet-accessories",
+      priceFrom: 35,
+      leadTimeDays: "1 day",
+      shortDescription: "Cute knitted flower charm for keys or handbags.",
+      description: "Handcrafted miniature flower charm attached to a sturdy metallic gold keychain clip.",
+      images: [
+        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1200&auto=format&fit=crop"
+      ],
+      options: [],
+      featured: false,
+      badge: "Handmade Luxury",
       active: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -245,6 +327,13 @@ function seed(): Store {
         name: "Farida A.",
         initials: "FA",
         quote: "Delicate and cute tulip pot. It sits on my desk and makes me smile every morning. Thank you Mashtool!",
+        rating: 5,
+      },
+      {
+        id: "t3",
+        name: "Nour M.",
+        initials: "NM",
+        quote: "The boho tote bag exceeded my expectations. Very durable and beautiful details!",
         rating: 5,
       },
     ],
@@ -968,6 +1057,96 @@ export async function deleteMessage(id: string): Promise<boolean> {
   return true;
 }
 
+/* ----------------------------- Categories Write ----------------------------- */
+
+export async function upsertCategory(input: {
+  id?: string | null;
+  name: string;
+  slug?: string;
+  tagline?: string;
+  description?: string;
+  image?: string;
+}): Promise<Category> {
+  const slug =
+    input.slug?.trim() ||
+    input.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+  if (isPrismaReady()) {
+    try {
+      if (input.id) {
+        const updated = await prismaDb.category.update({
+          where: { id: input.id },
+          data: {
+            name: input.name,
+            slug,
+            tagline: input.tagline ?? "",
+            description: input.description ?? "",
+            image: input.image ?? "",
+          },
+        });
+        return { ...updated };
+      } else {
+        const created = await prismaDb.category.create({
+          data: {
+            name: input.name,
+            slug,
+            tagline: input.tagline ?? "",
+            description: input.description ?? "",
+            image: input.image ?? "",
+          },
+        });
+        return { ...created };
+      }
+    } catch (err) {
+      console.error("Prisma error in upsertCategory:", err);
+    }
+  }
+
+  const existing = input.id ? memStore.categories.find((c) => c.id === input.id) : undefined;
+  if (existing) {
+    Object.assign(existing, {
+      name: input.name,
+      slug,
+      tagline: input.tagline ?? existing.tagline,
+      description: input.description ?? existing.description,
+      image: input.image ?? existing.image,
+    });
+    return clone(existing);
+  }
+
+  const category: Category = {
+    id: uid(),
+    slug,
+    name: input.name,
+    tagline: input.tagline ?? "",
+    description: input.description ?? "",
+    image: input.image ?? "",
+  };
+  memStore.categories.push(category);
+  return clone(category);
+}
+
+export async function deleteCategory(id: string): Promise<boolean> {
+  if (isPrismaReady()) {
+    try {
+      await prismaDb.category.delete({ where: { id } });
+      return true;
+    } catch (err) {
+      console.error("Prisma error in deleteCategory:", err);
+    }
+  }
+
+  const idx = memStore.categories.findIndex((c) => c.id === id);
+  if (idx === -1) return false;
+  memStore.categories.splice(idx, 1);
+  return true;
+}
+
+/* -------------------------------- Products Write ------------------------------- */
+
 export async function upsertProduct(input: {
   id?: string | null;
   name: string;
@@ -992,6 +1171,78 @@ export async function upsertProduct(input: {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
   const now = new Date().toISOString();
+
+  if (isPrismaReady()) {
+    try {
+      const dataPayload = {
+        name: input.name,
+        slug,
+        categoryId: category.id,
+        category: category.name,
+        categorySlug: category.slug,
+        priceFrom: Number(input.priceFrom || 0),
+        leadTimeDays: input.leadTimeDays,
+        shortDescription: input.shortDescription,
+        description: input.description,
+        images: (input.images ?? []) as any,
+        options: (input.options ?? []) as any,
+        featured: input.featured ?? false,
+        badge: input.badge ?? null,
+        active: input.active ?? true,
+      };
+
+      if (input.id) {
+        const p = await prismaDb.product.update({
+          where: { id: input.id },
+          data: dataPayload,
+        });
+        return {
+          id: p.id,
+          slug: p.slug,
+          name: p.name,
+          categoryId: p.categoryId ?? category.id,
+          category: p.category,
+          categorySlug: p.categorySlug,
+          priceFrom: Number(p.priceFrom),
+          leadTimeDays: p.leadTimeDays,
+          shortDescription: p.shortDescription,
+          description: p.description,
+          images: (p.images as string[]) || [],
+          options: (p.options as any[]) || [],
+          featured: p.featured,
+          badge: p.badge,
+          active: p.active,
+          createdAt: p.createdAt.toISOString(),
+          updatedAt: p.updatedAt.toISOString(),
+        };
+      } else {
+        const p = await prismaDb.product.create({
+          data: dataPayload,
+        });
+        return {
+          id: p.id,
+          slug: p.slug,
+          name: p.name,
+          categoryId: p.categoryId ?? category.id,
+          category: p.category,
+          categorySlug: p.categorySlug,
+          priceFrom: Number(p.priceFrom),
+          leadTimeDays: p.leadTimeDays,
+          shortDescription: p.shortDescription,
+          description: p.description,
+          images: (p.images as string[]) || [],
+          options: (p.options as any[]) || [],
+          featured: p.featured,
+          badge: p.badge,
+          active: p.active,
+          createdAt: p.createdAt.toISOString(),
+          updatedAt: p.updatedAt.toISOString(),
+        };
+      }
+    } catch (err) {
+      console.error("Prisma error in upsertProduct:", err);
+    }
+  }
 
   if (isSupabaseReady()) {
     const payload = {
@@ -1070,6 +1321,15 @@ export async function upsertProduct(input: {
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {
+  if (isPrismaReady()) {
+    try {
+      await prismaDb.product.delete({ where: { id } });
+      return true;
+    } catch (err) {
+      console.error("Prisma error in deleteProduct:", err);
+    }
+  }
+
   if (isSupabaseReady()) {
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (!error) return true;
@@ -1078,6 +1338,152 @@ export async function deleteProduct(id: string): Promise<boolean> {
   const i = memStore.products.findIndex((p) => p.id === id);
   if (i === -1) return false;
   memStore.products.splice(i, 1);
+  return true;
+}
+
+/* --------------------------------- Reviews -------------------------------- */
+
+const memReviews: Review[] = [
+  {
+    id: "r1",
+    productId: "p1",
+    name: "Mariam Hassan",
+    rating: 5,
+    comment: "المظهر والتقفيل ممتاز جداً! الورد متماسك وعجب والدتي جداً فالعيد.",
+    approved: true,
+    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+  },
+  {
+    id: "r2",
+    productId: "p1",
+    name: "Sarah Ahmed",
+    rating: 5,
+    comment: "Beautiful crochet bouquet! The cotton yarn is high quality and wrapping is elegant.",
+    approved: true,
+    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+  },
+  {
+    id: "r3",
+    productId: "p2",
+    name: "Salma Mahmoud",
+    rating: 5,
+    comment: "أصيص التوليب تحفة جداً على مكتبي وشكله شيك أوي ❤️",
+    approved: true,
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+  },
+];
+
+export async function listProductReviews(productId: string): Promise<Review[]> {
+  if (isPrismaReady()) {
+    try {
+      const rows = await withPrismaRetry(() =>
+        prismaDb.review.findMany({
+          where: { productId, approved: true },
+          orderBy: { createdAt: "desc" },
+        }),
+      );
+      if (rows && Array.isArray(rows)) {
+        return rows.map((r) => ({
+          id: r.id,
+          productId: r.productId,
+          name: r.name,
+          rating: r.rating,
+          comment: r.comment,
+          approved: r.approved,
+          createdAt: r.createdAt.toISOString(),
+        }));
+      }
+    } catch (err) {
+      console.error("Prisma error in listProductReviews:", err);
+    }
+  }
+
+  return clone(memReviews.filter((r) => r.productId === productId && r.approved));
+}
+
+export async function createReview(input: {
+  productId: string;
+  name: string;
+  rating: number;
+  comment: string;
+}): Promise<Review> {
+  const rating = Math.max(1, Math.min(5, Number(input.rating) || 5));
+  const iso = new Date().toISOString();
+
+  if (isPrismaReady()) {
+    try {
+      const created = await prismaDb.review.create({
+        data: {
+          productId: input.productId,
+          name: input.name,
+          rating,
+          comment: input.comment,
+          approved: true,
+        },
+      });
+      return {
+        id: created.id,
+        productId: created.productId,
+        name: created.name,
+        rating: created.rating,
+        comment: created.comment,
+        approved: created.approved,
+        createdAt: created.createdAt.toISOString(),
+      };
+    } catch (err) {
+      console.error("Prisma error in createReview:", err);
+    }
+  }
+
+  const review: Review = {
+    id: uid(),
+    productId: input.productId,
+    name: input.name,
+    rating,
+    comment: input.comment,
+    approved: true,
+    createdAt: iso,
+  };
+  memReviews.unshift(review);
+  return clone(review);
+}
+
+export async function adminListReviews(): Promise<Review[]> {
+  if (isPrismaReady()) {
+    try {
+      const rows = await withPrismaRetry(() =>
+        prismaDb.review.findMany({ orderBy: { createdAt: "desc" } }),
+      );
+      return rows.map((r) => ({
+        id: r.id,
+        productId: r.productId,
+        name: r.name,
+        rating: r.rating,
+        comment: r.comment,
+        approved: r.approved,
+        createdAt: r.createdAt.toISOString(),
+      }));
+    } catch (err) {
+      console.error("Prisma error in adminListReviews:", err);
+    }
+  }
+
+  return clone(memReviews);
+}
+
+export async function deleteReview(id: string): Promise<boolean> {
+  if (isPrismaReady()) {
+    try {
+      await prismaDb.review.delete({ where: { id } });
+      return true;
+    } catch (err) {
+      console.error("Prisma error in deleteReview:", err);
+    }
+  }
+
+  const idx = memReviews.findIndex((r) => r.id === id);
+  if (idx === -1) return false;
+  memReviews.splice(idx, 1);
   return true;
 }
 

@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
-import { LayoutDashboard, LogOut, Mail, Package, Settings as SettingsIcon, Sparkles } from "lucide-react";
+import { Folder, LayoutDashboard, LogOut, Mail, Package, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -25,6 +25,7 @@ export const Route = createFileRoute("/admin")({
 const NAV = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/admin/orders", label: "Orders", icon: Package, exact: false },
+  { to: "/admin/categories", label: "Categories", icon: Folder, exact: false },
   { to: "/admin/products", label: "Products", icon: Sparkles, exact: false },
   { to: "/admin/messages", label: "Messages", icon: Mail, exact: false },
 ] as const;
