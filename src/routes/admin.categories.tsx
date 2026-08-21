@@ -112,7 +112,7 @@ function AdminCategories() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-serif text-3xl text-primary sm:text-4xl">Categories (الكتالوجات)</h1>
+          <h1 className="font-serif text-3xl text-primary sm:text-4xl">Categories</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Manage your store collections and product sections.
           </p>

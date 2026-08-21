@@ -289,9 +289,9 @@ function ProductReviewsSection({
       setRating(5);
       setComment("");
       setShowForm(false);
-      toast.success("شكراً لك! تم إضافة تقييمك بنجاح");
+      toast.success("Thank you! Your review has been submitted.");
     },
-    onError: () => toast.error("تعذر إضافة التقييم، يرجى المحاولة مرة أخرى"),
+    onError: () => toast.error("Could not submit review. Please try again."),
   });
 
   return (
@@ -301,15 +301,15 @@ function ProductReviewsSection({
           <div>
             <SectionHeading
               eyebrow="Customer Reviews & Ratings"
-              title="آراء وتقييمات العملاء ⭐"
-              description="اقرأ تجارب وتقييمات محبي الكروشيه أو أضف تقييمك الخاص بهذه القطعة."
+              title="Artisan Reviews ⭐"
+              description="Read genuine feedback from crochet lovers or share your own experience with this piece."
             />
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
             className="rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90"
           >
-            {showForm ? "إلغاء التقييم" : "اكتب تقييمك الآن ✍️"}
+            {showForm ? "Cancel Review" : "Write a Review ✍️"}
           </button>
         </div>
 
@@ -330,7 +330,7 @@ function ProductReviewsSection({
               ))}
             </div>
             <div className="mt-1 text-xs text-muted-foreground">
-              بناءً على {reviews.length} تقييم حقيقي
+              Based on {reviews.length} genuine reviews
             </div>
           </div>
 
@@ -338,14 +338,14 @@ function ProductReviewsSection({
 
           <div className="flex-1 text-xs text-muted-foreground space-y-1">
             <div className="flex items-center gap-2">
-              <span>الجودة والتقفيل اليدوي</span>
+              <span>Handcrafting Quality</span>
               <div className="h-2 flex-1 rounded-full bg-blush overflow-hidden">
                 <div className="h-full bg-primary w-[96%]" />
               </div>
               <span className="font-semibold text-foreground">96%</span>
             </div>
             <div className="flex items-center gap-2">
-              <span>مطابقة الصور والتفاصيل</span>
+              <span>Item & Detail Fidelity</span>
               <div className="h-2 flex-1 rounded-full bg-blush overflow-hidden">
                 <div className="h-full bg-primary w-[98%]" />
               </div>
@@ -363,24 +363,24 @@ function ProductReviewsSection({
             }}
             className="mt-8 rounded-3xl border border-primary/20 bg-background p-6 shadow-md transition-all sm:p-8"
           >
-            <h3 className="font-serif text-xl text-primary">إضافة تقييم جديد</h3>
+            <h3 className="font-serif text-xl text-primary">Leave a Review</h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                  الاسم بالكامل *
+                  Full Name *
                 </label>
                 <input
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="مثال: سارة أحمد"
+                  placeholder="e.g. Sarah Ahmed"
                   className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm outline-none focus:border-primary"
                 />
               </div>
 
               <div>
                 <label className="block text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                  التقييم بالنجوم *
+                  Star Rating *
                 </label>
                 <div className="flex items-center gap-2 py-1">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -397,21 +397,21 @@ function ProductReviewsSection({
                       />
                     </button>
                   ))}
-                  <span className="mr-2 text-sm font-semibold text-primary">{rating} من 5</span>
+                  <span className="mr-2 text-sm font-semibold text-primary">{rating} of 5</span>
                 </div>
               </div>
             </div>
 
             <div className="mt-4">
               <label className="block text-xs uppercase tracking-wider text-muted-foreground mb-1">
-                رأيك وتجربتك مع المنتج *
+                Your Review & Experience *
               </label>
               <textarea
                 required
                 rows={3}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="اكتب تجربتك مع هذه القطعة الفنية..."
+                placeholder="Share your experience with this artisan piece..."
                 className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary"
               />
             </div>
@@ -422,14 +422,14 @@ function ProductReviewsSection({
                 onClick={() => setShowForm(false)}
                 className="rounded-xl border border-border px-5 py-2.5 text-sm text-muted-foreground"
               >
-                إلغاء
+                Cancel
               </button>
               <button
                 type="submit"
                 disabled={addReview.isPending || !name.trim() || !comment.trim()}
                 className="rounded-xl bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground disabled:opacity-50"
               >
-                {addReview.isPending ? "جاري الإرسال..." : "إرسال التقييم 🌟"}
+                {addReview.isPending ? "Submitting..." : "Submit Review 🌟"}
               </button>
             </div>
           </form>
@@ -439,7 +439,7 @@ function ProductReviewsSection({
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {reviews.length === 0 ? (
             <div className="col-span-full rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              لا توجد تقييمات مكتوبة لهذه القطعة بعد. كن أول من يشارك رأيه!
+              No reviews written for this piece yet. Be the first to share your thoughts!
             </div>
           ) : (
             reviews.map((r) => (
@@ -463,7 +463,7 @@ function ProductReviewsSection({
                   <p className="mt-3 text-sm leading-relaxed text-foreground/80">{r.comment}</p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-border/40 text-[11px] text-muted-foreground">
-                  {new Date(r.createdAt).toLocaleDateString("ar-EG", {
+                  {new Date(r.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",

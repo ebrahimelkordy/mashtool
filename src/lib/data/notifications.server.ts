@@ -18,23 +18,23 @@ const escapeHtml = (value: string) =>
 
 function orderHtml(order: Order) {
   const isBespoke = order.type === "bespoke";
-  const title = isBespoke ? "طلب تصميم خاص جديد (Bespoke Request)" : "طلب جديد من المتجر (New Order)";
+  const title = isBespoke ? "New Bespoke Commission Request" : "New Store Order Received";
   const badgeBg = isBespoke ? "#d97706" : "#2563eb";
-  const typeText = isBespoke ? "طلب خاص بمواصفات محددة" : "طلب منتج قياسي من الكتالوج";
+  const typeText = isBespoke ? "Custom Bespoke Order" : "Standard Catalog Piece";
 
   const optionsStr = order.selectedOptions.length
     ? order.selectedOptions.map((o) => `${o.optionName}: ${o.valueLabel}`).join(" | ")
-    : "بدون تفاصيل إضافية";
+    : "No custom options";
 
-  const priceText = order.total === null ? "يحتاج تسعير وتحديد تكلفة من الإدارة" : `${order.total} دولار`;
+  const priceText = order.total === null ? "Requires Admin Quoting" : `$${order.total}`;
 
   return `
   <!DOCTYPE html>
-  <html lang="ar" dir="rtl">
+  <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <style>
-      body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f5f0; margin: 0; padding: 20px; direction: rtl; }
+      body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f5f0; margin: 0; padding: 20px; direction: ltr; }
       .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #efe5da; }
       .header { background: #4a2e2b; padding: 30px 20px; text-align: center; color: #ffffff; }
       .header h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: 0.5px; }
@@ -46,7 +46,7 @@ function orderHtml(order: Order) {
       .data-table td { padding: 10px 12px; font-size: 14px; border-bottom: 1px dashed #f0e6dd; }
       .data-table td.label { color: #8c766b; font-weight: 600; width: 35%; }
       .data-table td.value { color: #2c221e; font-weight: 500; }
-      .highlight-box { background: #faf4ee; border-right: 4px solid #4a2e2b; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: #3a2b25; }
+      .highlight-box { background: #faf4ee; border-left: 4px solid #4a2e2b; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; color: #3a2b25; }
       .btn { display: block; width: 100%; background: #4a2e2b; color: #ffffff !important; text-align: center; padding: 14px 0; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 15px; margin-top: 20px; }
       .footer { background: #faf5f0; padding: 15px; text-align: center; font-size: 12px; color: #9c8a80; border-top: 1px solid #efe5da; }
     </style>
@@ -60,62 +60,62 @@ function orderHtml(order: Order) {
       </div>
       
       <div class="content">
-        <div class="section-title">📋 تفاصيل الطلبية</div>
+        <div class="section-title">📋 Order Details</div>
         <table class="data-table">
           <tr>
-            <td class="label">نوع الطلب:</td>
+            <td class="label">Order Type:</td>
             <td class="value"><strong>${escapeHtml(typeText)}</strong></td>
           </tr>
           <tr>
-            <td class="label">اسم القطعة / المنتج:</td>
-            <td class="value">${escapeHtml(order.productName ?? "تصميم خاص بناءً على الطلب")}</td>
+            <td class="label">Item Name:</td>
+            <td class="value">${escapeHtml(order.productName ?? "Bespoke Custom Order")}</td>
           </tr>
           <tr>
-            <td class="label">الكمية المطلوب غزلها:</td>
-            <td class="value">${escapeHtml(String(order.quantity))} قطعة</td>
+            <td class="label">Quantity:</td>
+            <td class="value">${escapeHtml(String(order.quantity))} units</td>
           </tr>
           <tr>
-            <td class="label">المواصفات والأبعاد:</td>
+            <td class="label">Options & Specs:</td>
             <td class="value">${escapeHtml(optionsStr)}</td>
           </tr>
           <tr>
-            <td class="label">التكلفة المتوقعة:</td>
+            <td class="label">Estimated Total:</td>
             <td class="value" style="color: #4a2e2b; font-size: 16px; font-weight: bold;">${escapeHtml(priceText)}</td>
           </tr>
         </table>
 
-        <div class="section-title">👤 بيانات العميل للتواصل</div>
+        <div class="section-title">👤 Customer Contact</div>
         <table class="data-table">
           <tr>
-            <td class="label">اسم العميل:</td>
+            <td class="label">Customer Name:</td>
             <td class="value"><strong>${escapeHtml(order.customerName)}</strong></td>
           </tr>
           <tr>
-            <td class="label">رقم الهاتف:</td>
-            <td class="value" dir="ltr" style="text-align: right;">${escapeHtml(order.phone)}</td>
+            <td class="label">Phone:</td>
+            <td class="value" dir="ltr">${escapeHtml(order.phone)}</td>
           </tr>
           <tr>
-            <td class="label">واتساب التواصل:</td>
-            <td class="value" dir="ltr" style="text-align: right;">${escapeHtml(order.whatsapp ?? "نفس رقم الهاتف")}</td>
+            <td class="label">WhatsApp:</td>
+            <td class="value" dir="ltr">${escapeHtml(order.whatsapp ?? "Same as phone")}</td>
           </tr>
           <tr>
-            <td class="label">عنوان التوصيل:</td>
-            <td class="value">${escapeHtml(order.address ?? "غير محدد")}</td>
+            <td class="label">Delivery Address:</td>
+            <td class="value">${escapeHtml(order.address ?? "Not specified")}</td>
           </tr>
         </table>
 
         ${
           order.notes
-            ? `<div class="section-title">💬 ملاحظات العميل الخاصة</div>
+            ? `<div class="section-title">💬 Customer Notes</div>
                <div class="highlight-box">${escapeHtml(order.notes)}</div>`
             : ""
         }
 
-        <a href="http://localhost:8083/admin/orders" class="btn">فتح لوحة التحكم والتسعير 🎯</a>
+        <a href="https://mashtool.vercel.app/admin/orders" class="btn">Open Admin Atelier 🎯</a>
       </div>
 
       <div class="footer">
-        هذا إشعار آلي فور وصول طلب جديد على متجر Mashtool اليدوي.
+        Automated notification for new order activity on Mashtool Atelier.
       </div>
     </div>
   </body>

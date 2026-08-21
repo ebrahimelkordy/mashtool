@@ -393,13 +393,14 @@ export async function saveFile(input: {
     }
   }
 
+  const dataUrl = `data:${input.contentType};base64,${input.base64}`;
   const file: StoredFile = {
     id,
     fileName: input.fileName,
     contentType: input.contentType,
     base64: input.base64,
     size: buffer.length,
-    url: `/api/public/uploads/${id}`,
+    url: dataUrl,
     createdAt: new Date().toISOString(),
   };
   memStore.files.set(id, file);
