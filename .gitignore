@@ -43,6 +43,7 @@ coverage/
 !public/logo.png
 !public/favicon.ico
 !public/robots.txt
+!public/images/**
 !src/assets/*
 
 .vercel

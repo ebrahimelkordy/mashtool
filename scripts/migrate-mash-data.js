@@ -55,6 +55,7 @@ const categoryMappings = [
 const productMappings = [
   {
     folder: 'bag',
+    targetFolder: 'bag',
     slug: 'boho-blossom-crochet-handbag',
     name: 'Boho Blossom Crochet Handbag',
     categorySlug: 'crochet-bags',
@@ -70,6 +71,7 @@ const productMappings = [
   },
   {
     folder: 'بوك ماركس/بوك مارك',
+    targetFolder: 'bookmarks/daisy',
     slug: 'daisy-flower-chain-bookmark',
     name: 'Daisy Flower Chain Bookmark',
     categorySlug: 'crochet-bookmarks',
@@ -83,6 +85,7 @@ const productMappings = [
   },
   {
     folder: 'بوك ماركس/بوك مارك 2',
+    targetFolder: 'bookmarks/sprout',
     slug: 'sprout-seedling-book-marker',
     name: 'Sprout Seedling Book Marker',
     categorySlug: 'crochet-bookmarks',
@@ -96,6 +99,7 @@ const productMappings = [
   },
   {
     folder: 'جوانتي صبارة',
+    targetFolder: 'cactus-gloves',
     slug: 'desert-cactus-fingerless-gloves',
     name: 'Desert Cactus Fingerless Gloves',
     categorySlug: 'cactus-gloves',
@@ -109,6 +113,7 @@ const productMappings = [
   },
   {
     folder: 'حذاء رضع باذن ارنب',
+    targetFolder: 'baby-shoes',
     slug: 'cotton-rabbit-ear-baby-booties',
     name: 'Cotton Rabbit-Ear Baby Booties',
     categorySlug: 'baby-shoes',
@@ -122,6 +127,7 @@ const productMappings = [
   },
   {
     folder: 'كفر مصحف',
+    targetFolder: 'quran-covers',
     slug: 'elegant-floral-quran-sleeve',
     name: 'Elegant Floral Quran Sleeve',
     categorySlug: 'quran-covers',
@@ -135,6 +141,7 @@ const productMappings = [
   },
   {
     folder: 'لعب/لعب خراف',
+    targetFolder: 'toys/sheep',
     slug: 'plush-little-lamb-amigurumi',
     name: 'Plush Little Lamb Amigurumi',
     categorySlug: 'crochet-toys',
@@ -148,6 +155,7 @@ const productMappings = [
   },
   {
     folder: 'لعب/لعب دجاج',
+    targetFolder: 'toys/chicken',
     slug: 'cute-clucking-chicken-plushie',
     name: 'Cute Clucking Chicken Plushie',
     categorySlug: 'crochet-toys',
@@ -161,6 +169,7 @@ const productMappings = [
   },
   {
     folder: 'لوح/لوحة',
+    targetFolder: 'wall-hangings/meadow',
     slug: 'embroidered-meadow-landscape-wall-hanging',
     name: 'Embroidered Meadow Landscape Wall Hanging',
     categorySlug: 'wall-hangings',
@@ -174,6 +183,7 @@ const productMappings = [
   },
   {
     folder: 'لوح/لوحة 2',
+    targetFolder: 'wall-hangings/blossom',
     slug: 'floral-blossom-framed-woven-art',
     name: 'Floral Blossom Framed Woven Art',
     categorySlug: 'wall-hangings',
@@ -188,6 +198,7 @@ const productMappings = [
   // Bouquets
   {
     folder: 'بوكيهات/lily fl',
+    targetFolder: 'bouquets/lily-fl',
     slug: 'gilded-white-lily-stem',
     name: 'Gilded White Lily Stem',
     categorySlug: 'crochet-bouquets',
@@ -201,6 +212,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/lily fl 2',
+    targetFolder: 'bouquets/lily-fl-2',
     slug: 'pastel-lily-leaf-stem',
     name: 'Pastel Lily & Leaf Stem',
     categorySlug: 'crochet-bouquets',
@@ -214,6 +226,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/بوكيه',
+    targetFolder: 'bouquets/bouq-1',
     slug: 'royal-tulip-blossom-bouquet',
     name: 'Royal Tulip & Blossom Bouquet',
     categorySlug: 'crochet-bouquets',
@@ -229,6 +242,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/بوكيه 2',
+    targetFolder: 'bouquets/bouq-2',
     slug: 'meadow-wildflower-arrangement',
     name: 'Meadow Wildflower Arrangement',
     categorySlug: 'crochet-bouquets',
@@ -242,6 +256,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/بوكيه 4',
+    targetFolder: 'bouquets/bouq-4',
     slug: 'crimson-rose-eucalyptus-bunch',
     name: 'Crimson Rose & Eucalyptus Bunch',
     categorySlug: 'crochet-bouquets',
@@ -255,6 +270,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/بوكيه 5',
+    targetFolder: 'bouquets/bouq-5',
     slug: 'blushing-rose-handheld-bouquet',
     name: 'Blushing Rose Handheld Bouquet',
     categorySlug: 'crochet-bouquets',
@@ -268,6 +284,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/بوكيه3',
+    targetFolder: 'bouquets/bouq-3',
     slug: 'ethereal-lavender-lily-bouquet',
     name: 'Ethereal Lavender & Lily Bouquet',
     categorySlug: 'crochet-bouquets',
@@ -281,6 +298,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/توليب',
+    targetFolder: 'bouquets/tulip-1',
     slug: 'single-classic-tulip-stem',
     name: 'Single Classic Tulip Stem',
     categorySlug: 'crochet-bouquets',
@@ -294,6 +312,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/توليب2',
+    targetFolder: 'bouquets/tulip-2',
     slug: 'double-pastel-tulip-bouquet',
     name: 'Double Pastel Tulip Bouquet',
     categorySlug: 'crochet-bouquets',
@@ -307,6 +326,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/ورد جوري',
+    targetFolder: 'bouquets/rose-jouri',
     slug: 'velvet-red-rose-stem',
     name: 'Velvet Red Rose Stem',
     categorySlug: 'crochet-bouquets',
@@ -320,6 +340,7 @@ const productMappings = [
   },
   {
     folder: 'بوكيهات/ورد دوار',
+    targetFolder: 'bouquets/sunflower',
     slug: 'bright-sunflower-daisy-bouquet',
     name: 'Bright Sunflower & Daisy Bouquet',
     categorySlug: 'crochet-bouquets',
@@ -334,7 +355,7 @@ const productMappings = [
 ];
 
 async function run() {
-  console.log("Starting database cleanup and restructuring...");
+  console.log("Starting database cleanup and restructuring with URL-safe filenames...");
 
   // 1. Delete all reviews, products, and categories
   await prisma.review.deleteMany().catch(() => {});
@@ -360,8 +381,8 @@ async function run() {
   // 3. Process image files and seed products
   for (const mapping of productMappings) {
     const productFolderPath = path.join(SOURCE_DIR, mapping.folder);
-    const targetFolderRelative = `/images/uploaded/${mapping.folder}`;
-    const targetFolderPath = path.join(TARGET_DIR, mapping.folder);
+    const targetFolderRelative = `/images/uploaded/${mapping.targetFolder}`;
+    const targetFolderPath = path.join(TARGET_DIR, mapping.targetFolder);
 
     ensureDirExists(targetFolderPath);
 
@@ -428,8 +449,6 @@ async function run() {
       const srcFilePath = path.join(keychainFolderPath, file);
       
       // Determine if image contains carrot or flower
-      // In Arabic: "الجزر ما تخليش حاجة. الورد ممكن تخليه ألوان."
-      // Since it's a mix, we can split them 50/50 or by specific keywords if present
       const isCarrot = file.includes('3.36.27') || file.includes('3.39.18');
       
       if (isCarrot) {
