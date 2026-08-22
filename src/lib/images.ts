@@ -32,7 +32,7 @@ const assetMap: Record<string, string> = {
 export function resolveImageUrl(src?: string | null, fallback = heroDrape, width = 650): string {
   if (!src) return fallback;
   if (assetMap[src]) return assetMap[src];
-  if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
+  if (src.startsWith("/") || src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
     if (src.includes("images.unsplash.com")) {
       // Strip any existing width/quality params and inject optimized WebP params
       const baseUrl = src.split("?")[0];
