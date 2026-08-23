@@ -15,12 +15,13 @@ function AdminOverview() {
     return <p className="text-sm text-destructive">Could not load dashboard statistics.</p>;
 
   const cards = [
-    { label: "Total orders", value: data.totalOrders },
-    { label: "Pending", value: data.pendingOrders },
-    { label: "In weaving", value: data.activeWeaves },
-    { label: "Delivered", value: data.deliveredOrders },
-    { label: "Unread messages", value: data.unreadMessages },
-    { label: "Products", value: data.productCount },
+    { label: "Total orders", value: data.totalOrders, to: "/admin/orders" },
+    { label: "Pending", value: data.pendingOrders, to: "/admin/orders" },
+    { label: "In weaving", value: data.activeWeaves, to: "/admin/orders" },
+    { label: "Delivered", value: data.deliveredOrders, to: "/admin/orders" },
+    { label: "Unread messages", value: data.unreadMessages, to: "/admin/messages" },
+    { label: "Products", value: data.productCount, to: "/admin/products" },
+    { label: "Categories", value: data.categoryCount, to: "/admin/categories" },
   ];
 
   const maxDay = Math.max(1, ...data.last7Days.map((d) => d.orders));
@@ -42,12 +43,16 @@ function AdminOverview() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {cards.map((c) => (
-          <div key={c.label} className="rounded-2xl border border-border/60 bg-background p-4 sm:p-5">
+          <Link
+            key={c.label}
+            to={c.to}
+            className="rounded-2xl border border-border/60 bg-background p-4 sm:p-5 transition-all hover:border-primary/50 hover:shadow-sm"
+          >
             <p className="text-xs uppercase tracking-wider text-muted-foreground">{c.label}</p>
             <p className="mt-2 font-serif text-3xl text-primary">{c.value}</p>
-          </div>
+          </Link>
         ))}
       </div>
 

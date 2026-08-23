@@ -12,6 +12,8 @@ import roseThrow from "@/assets/rose-throw.jpg";
 import heroDrape from "@/assets/hero-drape.jpg";
 import threads from "@/assets/threads.jpg";
 import artisanHands from "@/assets/artisan-hands.jpg";
+import fs from "fs";
+import path from "path";
 
 import { supabase, getSupabaseClient } from "./supabase.server";
 import { prismaDb } from "./prisma.server";
@@ -367,32 +369,67 @@ export async function saveFile(input: {
   const id = uid() + uid();
   const buffer = Buffer.from(input.base64, "base64");
 
-  if (isSupabaseReady()) {
-    const filePath = `uploads/${id}_${input.fileName.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
-    const { data: uploadData, error: uploadErr } = await supabase.storage
-      .from("product-images")
-      .upload(filePath, buffer, {
-        contentType: input.contentType,
-        upsert: true,
-      });
-
-    if (!uploadErr && uploadData) {
-      const { data: publicUrlData } = supabase.storage
+  // 1. Try Supabase Storage if client is available
+  const supabaseClient = getSupabaseClient();
+  if (supabaseClient) {
+    try {
+      const filePath = `uploads/${id}_${input.fileName.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const { data: uploadData, error: uploadErr } = await supabaseClient.storage
         .from("product-images")
-        .getPublicUrl(filePath);
+        .upload(filePath, buffer, {
+          contentType: input.contentType,
+          upsert: true,
+        });
 
+      if (!uploadErr && uploadData) {
+        const { data: publicUrlData } = supabaseClient.storage
+          .from("product-images")
+          .getPublicUrl(filePath);
+
+        return {
+          id,
+          fileName: input.fileName,
+          contentType: input.contentType,
+          base64: "",
+          size: buffer.length,
+          url: publicUrlData.publicUrl,
+          createdAt: new Date().toISOString(),
+        };
+      } else {
+        console.warn("Supabase upload error, trying local filesystem:", uploadErr);
+      }
+    } catch (err) {
+      console.warn("Supabase storage exception, trying local filesystem:", err);
+    }
+  }
+
+  // 2. Try local filesystem if process.cwd() is available
+  if (typeof process !== "undefined" && process.cwd) {
+    try {
+      const uploadDir = path.join(process.cwd(), "public/images/uploaded/dashboard");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      const fileExt = input.contentType.split("/")[1] || "png";
+      const fileName = `${id}.${fileExt}`;
+      const filePath = path.join(uploadDir, fileName);
+      fs.writeFileSync(filePath, buffer);
+      
       return {
         id,
         fileName: input.fileName,
         contentType: input.contentType,
         base64: "",
         size: buffer.length,
-        url: publicUrlData.publicUrl,
+        url: `/images/uploaded/dashboard/${fileName}`,
         createdAt: new Date().toISOString(),
       };
+    } catch (err) {
+      console.warn("Local file save failed, using base64 fallback:", err);
     }
   }
 
+  // 3. Absolute fallback: Base64 data URL
   const dataUrl = `data:${input.contentType};base64,${input.base64}`;
   const file: StoredFile = {
     id,
@@ -1103,6 +1140,7 @@ export async function upsertCategory(input: {
       }
     } catch (err) {
       console.error("Prisma error in upsertCategory:", err);
+      throw err;
     }
   }
 
@@ -1137,6 +1175,7 @@ export async function deleteCategory(id: string): Promise<boolean> {
       return true;
     } catch (err) {
       console.error("Prisma error in deleteCategory:", err);
+      throw err;
     }
   }
 
@@ -1242,6 +1281,7 @@ export async function upsertProduct(input: {
       }
     } catch (err) {
       console.error("Prisma error in upsertProduct:", err);
+      throw err;
     }
   }
 
@@ -1328,6 +1368,7 @@ export async function deleteProduct(id: string): Promise<boolean> {
       return true;
     } catch (err) {
       console.error("Prisma error in deleteProduct:", err);
+      throw err;
     }
   }
 
@@ -1433,6 +1474,7 @@ export async function createReview(input: {
       };
     } catch (err) {
       console.error("Prisma error in createReview:", err);
+      throw err;
     }
   }
 
@@ -1494,6 +1536,7 @@ export async function dashboardStats(): Promise<DashboardStats> {
   const orders = await listOrders("all");
   const products = await listProducts({ includeInactive: true });
   const messages = await listMessages();
+  const categories = await listCategories();
 
   const dayMs = 86_400_000;
   const today = new Date();
@@ -1513,6 +1556,7 @@ export async function dashboardStats(): Promise<DashboardStats> {
     deliveredOrders: orders.filter((o) => o.status === "delivered").length,
     unreadMessages: messages.filter((m) => !m.read).length,
     productCount: products.filter((p) => p.active).length,
+    categoryCount: categories.length,
     revenue: orders
       .filter((o) => ["paid", "weaving", "shipped", "delivered"].includes(o.status))
       .reduce((sum, o) => sum + (o.quotedPrice ?? o.total ?? 0), 0),

@@ -165,6 +165,7 @@ export type DashboardStats = {
   deliveredOrders: number;
   unreadMessages: number;
   productCount: number;
+  categoryCount: number;
   revenue: number;
   ordersByStatus: { status: OrderStatus; label: string; count: number }[];
   last7Days: { day: string; orders: number }[];
