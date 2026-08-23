@@ -16,6 +16,7 @@ model Category {
   tagline     String    @default("")
   description String    @default("")
   image       String    @default("")
+  featured    Boolean   @default(false)
   createdAt   DateTime  @default(now()) @map("created_at")
 
   products    Product[]

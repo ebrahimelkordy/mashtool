@@ -7,6 +7,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Sparkles,
   Trash2,
   X,
 } from "lucide-react";
@@ -195,10 +196,16 @@ function AdminProducts() {
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="truncate font-medium text-foreground">{p.name}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="truncate font-medium text-foreground">{p.name}</p>
+                {p.featured && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                    <Sparkles className="h-3 w-3" /> Featured on Home
+                  </span>
+                )}
+              </div>
               <p className="truncate text-xs text-muted-foreground">
                 {p.category} · from ${p.priceFrom}
-                {p.featured ? " · featured" : ""}
                 {p.active ? "" : " · hidden"}
               </p>
               <div className="mt-2 flex gap-2">

@@ -459,18 +459,24 @@ async function withTimeout<T>(promise: Promise<T>, ms = 3000): Promise<T | typeo
   ]);
 }
 
-export async function listCategories(): Promise<Category[]> {
+export async function listCategories(opts?: { featuredOnly?: boolean }): Promise<Category[]> {
   if (isPrismaReady()) {
     try {
-      const rows = await withPrismaRetry(() => prismaDb.category.findMany({ orderBy: { createdAt: 'asc' } }));
+      const rows = await withPrismaRetry(() =>
+        prismaDb.category.findMany({
+          where: opts?.featuredOnly ? { featured: true } : {},
+          orderBy: { createdAt: "asc" },
+        }),
+      );
       if (rows && rows.length > 0) {
-        return rows.map((c: { id: string; slug: string; name: string; tagline: string; description: string; image: string }) => ({
+        return rows.map((c: { id: string; slug: string; name: string; tagline: string; description: string; image: string; featured?: boolean }) => ({
           id: c.id,
           slug: c.slug,
           name: c.name,
           tagline: c.tagline,
           description: c.description,
           image: c.image,
+          featured: c.featured ?? false,
         }));
       }
     } catch (err) {
@@ -479,8 +485,10 @@ export async function listCategories(): Promise<Category[]> {
   }
   if (isSupabaseReady()) {
     try {
-      const result = await withTimeout(supabase.from("categories").select("*"));
-      if (result === TIMEOUT) throw new Error('Supabase timeout');
+      let query = supabase.from("categories").select("*");
+      if (opts?.featuredOnly) query = query.eq("featured", true);
+      const result = await withTimeout(query);
+      if (result === TIMEOUT) throw new Error("Supabase timeout");
       const { data, error } = result as { data: any; error: any };
       if (!error && data && data.length > 0) {
         return data.map((c: any) => ({
@@ -490,13 +498,18 @@ export async function listCategories(): Promise<Category[]> {
           tagline: c.tagline || "",
           description: c.description || "",
           image: c.image || "",
+          featured: c.featured ?? false,
         }));
       }
     } catch (err) {
       console.error("Supabase query error in listCategories:", err);
     }
   }
-  return clone(memStore.categories);
+  const all = memStore.categories;
+  if (opts?.featuredOnly) {
+    return clone(all.filter((c) => c.featured));
+  }
+  return clone(all);
 }
 
 export async function listProducts(opts?: {
@@ -1104,6 +1117,7 @@ export async function upsertCategory(input: {
   tagline?: string;
   description?: string;
   image?: string;
+  featured?: boolean;
 }): Promise<Category> {
   const slug =
     input.slug?.trim() ||
@@ -1123,6 +1137,7 @@ export async function upsertCategory(input: {
             tagline: input.tagline ?? "",
             description: input.description ?? "",
             image: input.image ?? "",
+            featured: input.featured ?? false,
           },
         });
         return { ...updated };
@@ -1134,6 +1149,7 @@ export async function upsertCategory(input: {
             tagline: input.tagline ?? "",
             description: input.description ?? "",
             image: input.image ?? "",
+            featured: input.featured ?? false,
           },
         });
         return { ...created };
@@ -1152,6 +1168,7 @@ export async function upsertCategory(input: {
       tagline: input.tagline ?? existing.tagline,
       description: input.description ?? existing.description,
       image: input.image ?? existing.image,
+      featured: input.featured ?? existing.featured ?? false,
     });
     return clone(existing);
   }
@@ -1163,6 +1180,7 @@ export async function upsertCategory(input: {
     tagline: input.tagline ?? "",
     description: input.description ?? "",
     image: input.image ?? "",
+    featured: input.featured ?? false,
   };
   memStore.categories.push(category);
   return clone(category);

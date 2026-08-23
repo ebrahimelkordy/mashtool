@@ -91,13 +91,15 @@ function Index() {
           description="Curated pieces that blend the mystical with modern minimalism."
         />
         <div className="mt-10 grid grid-cols-1 gap-5 sm:gap-6 md:mt-14 md:grid-cols-2">
-          {categories.slice(0, 4).map((cat, idx) => (
+          {categories.map((cat, idx) => (
             <Link
               key={cat.slug}
               to="/categories/$slug"
               params={{ slug: cat.slug }}
               className={`group relative overflow-hidden rounded-3xl bg-blush-soft ${
-                idx === 0 ? "aspect-[16/11] md:row-span-2 md:aspect-auto" : "aspect-[16/11] sm:aspect-[16/10]"
+                idx === 0 && categories.length > 2
+                  ? "aspect-[16/11] md:row-span-2 md:aspect-auto"
+                  : "aspect-[16/11] sm:aspect-[16/10]"
               }`}
             >
               <LazyImage

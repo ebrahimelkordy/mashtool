@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { FolderPlus, ImagePlus, Pencil, Plus, Search, Trash2, X } from "lucide-react";
+import { FolderPlus, ImagePlus, Pencil, Plus, Search, Sparkles, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -20,6 +20,7 @@ type CategoryDraft = {
   tagline: string;
   description: string;
   image: string;
+  featured?: boolean;
 };
 
 const emptyCategoryDraft: CategoryDraft = {
@@ -29,6 +30,7 @@ const emptyCategoryDraft: CategoryDraft = {
   tagline: "",
   description: "",
   image: "",
+  featured: false,
 };
 
 function readAsBase64(file: File) {
@@ -61,6 +63,7 @@ function AdminCategories() {
           tagline: d.tagline.trim(),
           description: d.description.trim(),
           image: d.image.trim(),
+          featured: d.featured ?? false,
         },
       }),
     onSuccess: async () => {
@@ -164,10 +167,17 @@ function AdminCategories() {
             )}
             <div className="flex min-w-0 flex-1 flex-col justify-between">
               <div>
-                <span className="inline-block rounded-full bg-blush px-2 py-0.5 text-[10px] uppercase tracking-wider text-primary">
-                  {c.tagline || c.slug}
-                </span>
-                <h3 className="truncate font-serif text-lg text-foreground">{c.name}</h3>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="inline-block rounded-full bg-blush px-2 py-0.5 text-[10px] uppercase tracking-wider text-primary">
+                    {c.tagline || c.slug}
+                  </span>
+                  {c.featured && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                      <Sparkles className="h-3 w-3" /> Home Page
+                    </span>
+                  )}
+                </div>
+                <h3 className="mt-1 truncate font-serif text-lg text-foreground">{c.name}</h3>
                 <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{c.description}</p>
               </div>
               <div className="mt-3 flex gap-2">
@@ -277,6 +287,19 @@ function AdminCategories() {
                     />
                   </label>
                 </div>
+              </label>
+
+              <label className="flex items-center gap-2 pt-1 text-sm text-foreground">
+                <input
+                  type="checkbox"
+                  checked={draft.featured ?? false}
+                  onChange={(e) => setDraft({ ...draft, featured: e.target.checked })}
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                />
+                <span className="flex items-center gap-1.5 font-medium">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  Show on Home Page (Featured Category)
+                </span>
               </label>
 
               {draft.image && (

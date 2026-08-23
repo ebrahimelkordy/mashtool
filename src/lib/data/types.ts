@@ -28,6 +28,7 @@ export type Category = {
   tagline: string;
   description: string;
   image: string;
+  featured?: boolean;
 };
 
 /** A configurable choice on a product (e.g. "Size", "Yarn colour"). */

@@ -61,10 +61,14 @@ export const submitReview = createServerFn({ method: "POST" })
   )
   .handler(({ data }) => repo.createReview(data));
 
-export const getHomeData = createServerFn({ method: "GET" }).handler(async () => ({
-  categories: await repo.listCategories(),
-  featured: await repo.listProducts({ featured: true }),
-}));
+export const getHomeData = createServerFn({ method: "GET" }).handler(async () => {
+  const featuredCategories = await repo.listCategories({ featuredOnly: true });
+  const categories = featuredCategories.length > 0 ? featuredCategories : await repo.listCategories();
+  return {
+    categories,
+    featured: await repo.listProducts({ featured: true }),
+  };
+});
 
 export const getTestimonials = createServerFn({ method: "GET" }).handler(() =>
   repo.listTestimonials(),
@@ -336,6 +340,7 @@ export const adminSaveCategory = createServerFn({ method: "POST" })
         tagline: z.string().max(200).optional(),
         description: z.string().max(2000).optional(),
         image: z.string().optional(),
+        featured: z.boolean().optional(),
       })
       .parse(input),
   )
