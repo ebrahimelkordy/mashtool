@@ -89,34 +89,16 @@ graph TD
 
 ---
 
-## 🚀 Local Development Setup
+---
 
-### 1. Clone Repository & Install Dependencies
-```bash
-git clone https://github.com/ebrahimelkordy/mashtool.git
-cd mashtool
-npm install
-```
+## 🔒 Commercial Architecture & Production Showcase
 
-### 2. Configure Environment Variables
-Create a `.env` file in the project root:
-```env
-DATABASE_URL="postgresql://user:password@host:5432/dbname"
-SESSION_SECRET="your-session-secret-key"
-ADMIN_PASSCODE="admin123"
-```
+> **Note**: This repository represents a proprietary commercial fullstack web application engineered for client production. Source code structure and architecture are published for technical portfolio demonstration and code review purposes.
 
-### 3. Database Migration & Prisma Client
-```bash
-npx prisma db push
-npx prisma generate
-```
-
-### 4. Run Development Server
-```bash
-npm run dev
-```
-Open [http://localhost:8081](http://localhost:8081) in your browser.
+### 🌐 Live Platform Access
+- **Production URL**: [https://mashtool.vercel.app](https://mashtool.vercel.app)
+- **Deployment Status**: Active Edge Production on Vercel & Supabase Cloud
+- **Security & Integrity**: 100% Type-safe server function mutations with strict input validation schema.
 
 ---
 
