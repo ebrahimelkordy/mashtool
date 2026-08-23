@@ -36,7 +36,7 @@ function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex shrink-0 items-center gap-1 text-primary sm:gap-3">
+        <div className="flex shrink-0 items-center gap-2 text-primary sm:gap-3">
           <Link
             to="/products"
             aria-label="Browse collections"
@@ -62,7 +62,7 @@ function Header() {
         </div>
       </div>
       {open && (
-        <nav className="border-t border-border/60 bg-background px-4 pb-4 pt-2 md:hidden">
+        <nav className="border-t border-border/60 bg-background px-4 pb-4 pt-2 md:hidden flex flex-col gap-1">
           {NAV.map((n) => (
             <Link
               key={n.to}
@@ -77,7 +77,7 @@ function Header() {
           <Link
             to="/special-order"
             onClick={() => setOpen(false)}
-            className="mt-2 block rounded-xl bg-primary px-3 py-3 text-center text-sm font-medium text-primary-foreground"
+            className="block rounded-xl bg-primary px-3 py-3 text-center text-sm font-medium text-primary-foreground"
           >
             Commission a piece
           </Link>
