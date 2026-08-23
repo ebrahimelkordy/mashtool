@@ -41,15 +41,15 @@ function copyFile(src, dest) {
 }
 
 const categoryMappings = [
-  { id: "cat-bags", slug: "crochet-bags", name: "Atelier Bags", tagline: "Luxury Knitted Purses & Bags", description: "Vibrant and durable handcrafted bags, carefully lined and designed with premium yarn." },
-  { id: "cat-bookmarks", slug: "crochet-bookmarks", name: "Artisan Bookmarks", tagline: "Artistic Reading Companions", description: "Charming hand-crocheted bookmarks to sit between your favorite pages." },
-  { id: "cat-bouquets", slug: "crochet-bouquets", name: "Floral Bouquets", tagline: "Everlasting Hand-Knit Blooms", description: "Premium handcrafted bouquets and single-stem flowers that never fade." },
-  { id: "cat-gloves", slug: "cactus-gloves", name: "Winter Cactus Gloves", tagline: "Cozy Wool Fingerless Warmers", description: "Warm fingerless wool gloves adorned with detailed cactus embroidery." },
-  { id: "cat-shoes", slug: "baby-shoes", name: "Rabbit Baby Shoes", tagline: "Gentle Cotton Infant Booties", description: "Baby booties knitted with organic cotton threads and adorned with soft rabbit ears." },
-  { id: "cat-covers", slug: "quran-covers", name: "Embellished Quran Covers", tagline: "Beautiful Book Sleeves", description: "Intricate hand-crocheted sleeves to protect books, Qurans, and notebooks." },
-  { id: "cat-toys", slug: "crochet-toys", name: "Amigurumi Toys", tagline: "Hypoallergenic Soft Companions", description: "Plush sheep and chicken toys crafted with child-safe organic yarns." },
-  { id: "cat-wall", slug: "wall-hangings", name: "Woven Wall Hangings", tagline: "Artisan Fabric Wall Art", description: "Hand-embroidered meadows and mounted 3D crochet floral wall canvas frames." },
-  { id: "cat-acc", slug: "accessories", name: "Keychain Accessories", tagline: "Charming Keyring Sleeves", description: "Flower and carrot-shaped hand-crocheted lip balm holder keychains." }
+  { id: "cat-bags", slug: "crochet-bags", name: "Atelier Bags", tagline: "Luxury Knitted Purses & Bags", description: "Vibrant and durable handcrafted bags, carefully lined and designed with premium yarn.", image: "/images/uploaded/bag/boho-blossom-crochet-handbag_1.jpeg" },
+  { id: "cat-bookmarks", slug: "crochet-bookmarks", name: "Artisan Bookmarks", tagline: "Artistic Reading Companions", description: "Charming hand-crocheted bookmarks to sit between your favorite pages.", image: "/images/uploaded/bookmarks/daisy/daisy-flower-chain-bookmark_1.jpeg" },
+  { id: "cat-bouquets", slug: "crochet-bouquets", name: "Floral Bouquets", tagline: "Everlasting Hand-Knit Blooms", description: "Premium handcrafted bouquets and single-stem flowers that never fade.", image: "/images/uploaded/bouquets/bouq-1/royal-tulip-blossom-bouquet_1.jpeg" },
+  { id: "cat-gloves", slug: "cactus-gloves", name: "Winter Cactus Gloves", tagline: "Cozy Wool Fingerless Warmers", description: "Warm fingerless wool gloves adorned with detailed cactus embroidery.", image: "/images/uploaded/cactus-gloves/desert-cactus-fingerless-gloves_1.jpeg" },
+  { id: "cat-shoes", slug: "baby-shoes", name: "Rabbit Baby Shoes", tagline: "Gentle Cotton Infant Booties", description: "Baby booties knitted with organic cotton threads and adorned with soft rabbit ears.", image: "/images/uploaded/baby-shoes/cotton-rabbit-ear-baby-booties_1.jpeg" },
+  { id: "cat-covers", slug: "quran-covers", name: "Embellished Quran Covers", tagline: "Beautiful Book Sleeves", description: "Intricate hand-crocheted sleeves to protect books, Qurans, and notebooks.", image: "/images/uploaded/quran-covers/elegant-floral-quran-sleeve_1.png" },
+  { id: "cat-toys", slug: "crochet-toys", name: "Amigurumi Toys", tagline: "Hypoallergenic Soft Companions", description: "Plush sheep and chicken toys crafted with child-safe organic yarns.", image: "/images/uploaded/toys/sheep/plush-little-lamb-amigurumi_1.jpeg" },
+  { id: "cat-wall", slug: "wall-hangings", name: "Woven Wall Hangings", tagline: "Artisan Fabric Wall Art", description: "Hand-embroidered meadows and mounted 3D crochet floral wall canvas frames.", image: "/images/uploaded/wall-hangings/meadow/embroidered-meadow-landscape-wall-hanging_1.png" },
+  { id: "cat-acc", slug: "accessories", name: "Keychain Accessories", tagline: "Charming Keyring Sleeves", description: "Flower and carrot-shaped hand-crocheted lip balm holder keychains.", image: "/images/uploaded/accessories/flower_lipstick_holder_1.jpeg" }
 ];
 
 const productMappings = [
@@ -372,7 +372,7 @@ async function run() {
       name: cat.name,
       tagline: cat.tagline,
       description: cat.description,
-      image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=1200&auto=format&fit=crop" // Default elegant cover
+      image: cat.image
     };
     await prisma.category.create({ data: formattedCategory });
   }
