@@ -16,7 +16,7 @@ function Header() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto grid h-16 max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6 md:h-20 md:px-10">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 md:h-20 md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:gap-3 md:px-10">
         <Link
           to="/"
           className="flex min-w-0 items-center gap-3 font-serif text-xl tracking-tight text-primary sm:text-2xl md:text-3xl"
