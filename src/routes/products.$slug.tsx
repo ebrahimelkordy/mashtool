@@ -61,8 +61,12 @@ function ProductDetail() {
     );
   }
 
-  const { product, related, testimonials } = data;
+  const { product, related, reviews = [] } = data;
   const imageIndex = Math.min(active, product.images.length - 1);
+  const reviewsCount = reviews.length;
+  const avgRatingVal = reviewsCount > 0
+    ? reviews.reduce((acc, r) => acc + (r.rating || 5), 0) / reviewsCount
+    : 0;
 
   let optionsExtra = 0;
   if (product.options) {
@@ -120,16 +124,42 @@ function ProductDetail() {
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground sm:text-base">
               {product.description}
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-foreground/70">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className={`h-4 w-4 ${i < 4 ? "fill-primary text-primary" : "text-primary/40"}`}
-                  strokeWidth={1.5}
-                />
-              ))}
-              <span className="ml-1">(24 artisan reviews)</span>
+            <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-foreground/70 font-medium">
+              {reviewsCount > 0 ? (
+                <>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${
+                          i < Math.round(avgRatingVal)
+                            ? "fill-primary text-primary"
+                            : "text-primary/20"
+                        }`}
+                        strokeWidth={1.5}
+                      />
+                    ))}
+                  </div>
+                  <span className="ml-1">
+                    ({avgRatingVal.toFixed(1)} out of 5 based on {reviewsCount} {reviewsCount === 1 ? "review" : "reviews"})
+                  </span>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-4 w-4 text-primary/20"
+                        strokeWidth={1.5}
+                      />
+                    ))}
+                  </div>
+                  <span className="ml-1 text-muted-foreground">(No reviews yet)</span>
+                </>
+              )}
             </div>
+
             {product.options && product.options.length > 0 && (
               <div className="mt-6 space-y-4 border-t border-border pt-6">
                 {product.options.map((opt) => (
@@ -219,33 +249,6 @@ function ProductDetail() {
       {/* CUSTOMER REVIEWS & RATINGS */}
       <ProductReviewsSection productId={product.id} reviews={data.reviews || []} />
 
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6 md:px-10 md:py-24">
-        <SectionHeading
-          title="Echoes from the Loom"
-          description="See how others have welcomed this magic into their spaces."
-        />
-        <div className="mt-10 grid grid-cols-1 gap-5 md:mt-12 md:grid-cols-2 md:gap-6">
-          {testimonials.map((t) => (
-            <div key={t.id} className="rounded-2xl bg-card p-6 shadow-sm sm:p-8">
-              <div className="flex gap-1 text-primary">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-primary" strokeWidth={1} />
-                ))}
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-foreground/85 sm:text-base">
-                “{t.quote}”
-              </p>
-              <div className="mt-5 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blush font-serif text-primary">
-                  {t.initials}
-                </div>
-                <div className="text-sm text-muted-foreground">{t.name}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {related.length > 0 && (
         <section className="mx-auto max-w-7xl px-5 pb-20 sm:px-6 md:px-10 md:pb-24">
           <SectionHeading eyebrow="You may also love" title="Threads nearby" />
@@ -302,7 +305,7 @@ function ProductReviewsSection({
           <div>
             <SectionHeading
               eyebrow="Customer Reviews & Ratings"
-              title="Artisan Reviews ⭐"
+              title="Customer Reviews ⭐"
               description="Read genuine feedback from crochet lovers or share your own experience with this piece."
             />
           </div>
