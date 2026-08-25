@@ -83,262 +83,12 @@ type Store = {
 };
 
 function seed(): Store {
-  const categories: Category[] = [
-    {
-      id: "c1",
-      slug: "crochet-bouquets",
-      name: "Crochet Flower Bouquets",
-      tagline: "Everlasting Knitted Blooms",
-      description: "Premium hand-knit flower bouquets crafted with luxury cotton threads. Perfect gifts that never wither.",
-      image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "c2",
-      slug: "crochet-accessories",
-      name: "Chic Crochet Accessories",
-      tagline: "Hand-knitted Daily Essentials",
-      description: "Elegant hand-crocheted bags, bookmarks, keychains and lifestyle accessories designed with precision.",
-      image: "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?q=80&w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "c3",
-      slug: "crochet-decor",
-      name: "Cozy Crochet Decor",
-      tagline: "Soft Artisan Touches",
-      description: "Coasters, mug hugs, and warm home accents knitted by hand to elevate your living space.",
-      image: "https://images.unsplash.com/photo-1620619767323-b95a89183081?q=80&w=1200&auto=format&fit=crop",
-    },
-    {
-      id: "c4",
-      slug: "amigurumi-toys",
-      name: "Amigurumi Toys",
-      tagline: "Handmade Whimsical Friends",
-      description: "Cute, stuffed crochet toys crafted with child-safe organic yarns. Perfect companions for little ones.",
-      image: "https://images.unsplash.com/photo-1594921319760-4b893a00fde4?q=80&w=1200&auto=format&fit=crop",
-    },
-  ];
-
-  const products: Product[] = [
-    {
-      id: "p1",
-      slug: "royal-crochet-rose-bouquet",
-      name: "Royal Crochet Rose Bouquet",
-      categoryId: "c1",
-      category: "Crochet Flower Bouquets",
-      categorySlug: "crochet-bouquets",
-      priceFrom: 450,
-      leadTimeDays: "3–5 days",
-      shortDescription: "Luxurious bouquet of 7 hand-knitted red and blush pink roses.",
-      description: "Beautifully crafted using premium organic cotton yarns. Includes elegant kraft paper wrapping and a customizable card.",
-      images: [
-        "https://images.unsplash.com/photo-1561181286-d3fee7d55364?q=80&w=1200&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [
-        {
-          id: "opt-size",
-          name: "Bouquet Size",
-          required: true,
-          values: [
-            { id: "v-m", label: "Medium (7 Roses)", priceDelta: 0 },
-            { id: "v-l", label: "Large (12 Roses)", priceDelta: 250 },
-          ],
-        },
-      ],
-      featured: true,
-      badge: "Best Seller",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p2",
-      slug: "eternal-tulip-pot",
-      name: "Eternal Crochet Tulip Pot",
-      categoryId: "c1",
-      category: "Crochet Flower Bouquets",
-      categorySlug: "crochet-bouquets",
-      priceFrom: 180,
-      leadTimeDays: "2–3 days",
-      shortDescription: "Cute desk-sized crochet tulip pot in pastel colors.",
-      description: "Brighten up your study desk or office with this charming everlasting tulip pot. Knitted with soft acrylic & cotton blend.",
-      images: [
-        "https://images.unsplash.com/photo-1520763185298-1b434c919102?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [
-        {
-          id: "opt-color",
-          name: "Flower Color",
-          required: true,
-          values: [
-            { id: "v-pink", label: "Pastel Pink", priceDelta: 0 },
-            { id: "v-yellow", label: "Sunny Yellow", priceDelta: 0 },
-            { id: "v-purple", label: "Lavender Purple", priceDelta: 0 },
-          ],
-        },
-      ],
-      featured: true,
-      badge: "Popular",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p3",
-      slug: "boho-crochet-tote-bag",
-      name: "Boho Chic Crochet Tote Bag",
-      categoryId: "c2",
-      category: "Chic Crochet Accessories",
-      categorySlug: "crochet-accessories",
-      priceFrom: 380,
-      leadTimeDays: "5–7 days",
-      shortDescription: "Sturdy, hand-knitted boho style shoulder bag.",
-      description: "A spacious and fashionable tote bag knitted with thick cotton cords, featuring comfortable sturdy handles.",
-      images: [
-        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [],
-      featured: true,
-      badge: "New Arrival",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p4",
-      slug: "daisy-chain-bookmark",
-      name: "Daisy Chain Crochet Bookmark",
-      categoryId: "c2",
-      category: "Chic Crochet Accessories",
-      categorySlug: "crochet-accessories",
-      priceFrom: 45,
-      leadTimeDays: "1–2 days",
-      shortDescription: "Delicate floral bookmark hand-knitted for book lovers.",
-      description: "Keep your place with this elegant chain of daisies. Made with extra-fine threads for a flat, beautiful design.",
-      images: [
-        "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [],
-      featured: false,
-      badge: "Cozy Gift",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p5",
-      slug: "artisan-blossom-coasters",
-      name: "Artisan Blossom Crochet Coasters",
-      categoryId: "c3",
-      category: "Cozy Crochet Decor",
-      categorySlug: "crochet-decor",
-      priceFrom: 90,
-      leadTimeDays: "2 days",
-      shortDescription: "Set of 4 flower-shaped cup coasters in natural shades.",
-      description: "Add a warm, cottagecore aesthetic to your coffee table. Heat-resistant and machine-washable cotton.",
-      images: [
-        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [],
-      featured: false,
-      badge: "Home Favorite",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p6",
-      slug: "sunflower-sunshine-bouquet",
-      name: "Sunflower Sunshine Crochet Bouquet",
-      categoryId: "c1",
-      category: "Crochet Flower Bouquets",
-      categorySlug: "crochet-bouquets",
-      priceFrom: 320,
-      leadTimeDays: "3 days",
-      shortDescription: "Vibrant hand-knit sunflower bouquet that spreads joy.",
-      description: "Bright yellow sunflowers knitted with dark brown centers and green stems. Brings warmth and cheerfulness.",
-      images: [
-        "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [],
-      featured: true,
-      badge: "Trending",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p7",
-      slug: "handmade-teddy-bear-amigurumi",
-      name: "Handmade Teddy Bear Amigurumi",
-      categoryId: "c4",
-      category: "Amigurumi Toys",
-      categorySlug: "amigurumi-toys",
-      priceFrom: 220,
-      leadTimeDays: "3–4 days",
-      shortDescription: "Adorable hand-knitted teddy bear toy with hypoallergenic stuffing.",
-      description: "Crafted with love using organic baby-safe cotton yarn and safety eyes. Super soft and huggable.",
-      images: [
-        "https://images.unsplash.com/photo-1559454403-b8fb88521f11?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [],
-      featured: true,
-      badge: "Kids Love It",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "p8",
-      slug: "crochet-keychain-flower-charm",
-      name: "Mini Flower Keychain Charm",
-      categoryId: "c2",
-      category: "Chic Crochet Accessories",
-      categorySlug: "crochet-accessories",
-      priceFrom: 35,
-      leadTimeDays: "1 day",
-      shortDescription: "Cute knitted flower charm for keys or handbags.",
-      description: "Handcrafted miniature flower charm attached to a sturdy metallic gold keychain clip.",
-      images: [
-        "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1200&auto=format&fit=crop"
-      ],
-      options: [],
-      featured: false,
-      badge: "Handmade Luxury",
-      active: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
-
   return {
-    categories,
-    products,
+    categories: [],
+    products: [],
     orders: [],
     messages: [],
-    testimonials: [
-      {
-        id: "t1",
-        name: "Yasmine K.",
-        initials: "YK",
-        quote: "The rose bouquet is stunning! My mother was so happy with it. Excellent knitting quality.",
-        rating: 5,
-      },
-      {
-        id: "t2",
-        name: "Farida A.",
-        initials: "FA",
-        quote: "Delicate and cute tulip pot. It sits on my desk and makes me smile every morning. Thank you Mashtool!",
-        rating: 5,
-      },
-      {
-        id: "t3",
-        name: "Nour M.",
-        initials: "NM",
-        quote: "The boho tote bag exceeded my expectations. Very durable and beautiful details!",
-        rating: 5,
-      },
-    ],
+    testimonials: [],
     files: new Map(),
     settings: {
       adminNotificationEmail: process.env["ADMIN_EMAIL"] || "mashtool0@gmail.com",
@@ -353,6 +103,7 @@ function seed(): Store {
     },
   };
 }
+
 
 const globalRef = globalThis as unknown as { __mysticLoomStore?: Store };
 const memStore: Store = (globalRef.__mysticLoomStore = seed());
@@ -468,7 +219,7 @@ export async function listCategories(opts?: { featuredOnly?: boolean }): Promise
           orderBy: { createdAt: "asc" },
         }),
       );
-      if (rows && rows.length > 0) {
+      if (rows && Array.isArray(rows)) {
         return rows.map((c: { id: string; slug: string; name: string; tagline: string; description: string; image: string; featured?: boolean }) => ({
           id: c.id,
           slug: c.slug,
@@ -483,33 +234,7 @@ export async function listCategories(opts?: { featuredOnly?: boolean }): Promise
       console.error("Prisma error in listCategories:", err);
     }
   }
-  if (isSupabaseReady()) {
-    try {
-      let query = supabase.from("categories").select("*");
-      if (opts?.featuredOnly) query = query.eq("featured", true);
-      const result = await withTimeout(query);
-      if (result === TIMEOUT) throw new Error("Supabase timeout");
-      const { data, error } = result as { data: any; error: any };
-      if (!error && data && data.length > 0) {
-        return data.map((c: any) => ({
-          id: c.id,
-          slug: c.slug,
-          name: c.name,
-          tagline: c.tagline || "",
-          description: c.description || "",
-          image: c.image || "",
-          featured: c.featured ?? false,
-        }));
-      }
-    } catch (err) {
-      console.error("Supabase query error in listCategories:", err);
-    }
-  }
-  const all = memStore.categories;
-  if (opts?.featuredOnly) {
-    return clone(all.filter((c) => c.featured));
-  }
-  return clone(all);
+  return [];
 }
 
 export async function listProducts(opts?: {
@@ -554,15 +279,7 @@ export async function listProducts(opts?: {
       console.error('Prisma error in listProducts:', err);
     }
   }
-
-  return clone(
-    memStore.products.filter(
-      (p) =>
-        (opts?.includeInactive || p.active) &&
-        (!opts?.categorySlug || p.categorySlug === opts.categorySlug) &&
-        (opts?.featured === undefined || p.featured === opts.featured),
-    ),
-  );
+  return [];
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -579,7 +296,7 @@ export async function listTestimonials(): Promise<Testimonial[]> {
   if (isPrismaReady()) {
     try {
       const rows = await withPrismaRetry(() => prismaDb.testimonial.findMany({ orderBy: { createdAt: 'asc' } }));
-      if (rows && rows.length > 0) {
+      if (rows && Array.isArray(rows)) {
         return rows.map((t) => ({
           id: t.id,
           name: t.name,
@@ -592,7 +309,7 @@ export async function listTestimonials(): Promise<Testimonial[]> {
       console.error('Prisma error in listTestimonials:', err);
     }
   }
-  return clone(memStore.testimonials);
+  return [];
 }
 
 export async function getOrderByNumber(orderNumber: string): Promise<Order | null> {
@@ -647,32 +364,32 @@ export async function listOrders(status?: OrderStatus | "all"): Promise<Order[]>
       console.error('Prisma error in listOrders:', err);
     }
   }
-
-  const rows = memStore.orders.filter((o) => !status || status === "all" || o.status === status);
-  return clone(rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
+  return [];
 }
 
 export async function listMessages(): Promise<Message[]> {
   if (isPrismaReady()) {
     try {
       const rows = await withPrismaRetry(() => prismaDb.message.findMany({ orderBy: { createdAt: 'desc' } }));
-      return rows.map((m) => ({
-        id: m.id,
-        name: m.name,
-        email: m.email ?? '',
-        phone: m.phone ?? '',
-        subject: m.subject,
-        body: m.body,
-        read: m.read,
-        createdAt: m.createdAt.toISOString(),
-      }));
+      if (rows && Array.isArray(rows)) {
+        return rows.map((m) => ({
+          id: m.id,
+          name: m.name,
+          email: m.email ?? '',
+          phone: m.phone ?? '',
+          subject: m.subject,
+          body: m.body,
+          read: m.read,
+          createdAt: m.createdAt.toISOString(),
+        }));
+      }
     } catch (err) {
       console.error('Prisma error in listMessages:', err);
     }
   }
-
-  return clone([...memStore.messages].sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
+  return [];
 }
+
 
 /* -------------------------------- Settings -------------------------------- */
 

@@ -2,7 +2,7 @@ import { defineConfig } from '@prisma/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
-const DATABASE_URL = process.env.DATABASE_URL ?? 'postgres://4983c5767ae886b854ceea0915db482689508791e8efd08b74a8dbfe04b8a733:sk_G5P830zWwu0bijwUyhDsK@pooled.db.prisma.io:5432/postgres?sslmode=no-verify';
+const DATABASE_URL = process.env.DATABASE_URL ?? 'postgres://668e392f0a8d0f6096d3ad65f578cdb496daea16ec884d5e9a60be8d627f2e75:sk_WzziBQaTXS4lPYm7FOPYP@pooled.db.prisma.io:5432/postgres?sslmode=require';
 
 const pool = new pg.Pool({
   connectionString: DATABASE_URL,
