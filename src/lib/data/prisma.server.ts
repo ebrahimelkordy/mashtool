@@ -19,11 +19,12 @@ function createPgPool(): pg.Pool {
   return new pg.Pool({
     connectionString: DATABASE_URL,
     ssl: { rejectUnauthorized: false },
-    // Allow up to 10s to acquire a connection on cold-start
-    connectionTimeoutMillis: 10_000,
-    // Idle connections are released after 30s to avoid stale sockets
-    idleTimeoutMillis: 30_000,
-    max: 5,
+    // Connection acquisition timeout
+    connectionTimeoutMillis: 8_000,
+    // Keep idle connections alive for 120s to avoid expensive reconnects on subsequent requests
+    idleTimeoutMillis: 120_000,
+    max: 10,
+    keepAlive: true,
   });
 }
 

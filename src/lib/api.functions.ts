@@ -37,11 +37,17 @@ export const getProductBySlug = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const product = await repo.getProductBySlug(data.slug);
     if (!product) return { product: null, related: [], testimonials: [], reviews: [] };
-    const related = (await repo.listProducts({ categorySlug: product.categorySlug }))
+    
+    // Execute related products, reviews, and testimonials in parallel
+    const [relatedAll, reviews, testimonials] = await Promise.all([
+      repo.listProducts({ categorySlug: product.categorySlug }),
+      repo.listProductReviews(product.id),
+      repo.listTestimonials(),
+    ]);
+    const related = relatedAll
       .filter((p) => p.id !== product.id)
       .slice(0, 3);
-    const reviews = await repo.listProductReviews(product.id);
-    return { product, related, testimonials: await repo.listTestimonials(), reviews };
+    return { product, related, testimonials, reviews };
   });
 
 export const getProductReviews = createServerFn({ method: "GET" })
@@ -62,11 +68,15 @@ export const submitReview = createServerFn({ method: "POST" })
   .handler(({ data }) => repo.createReview(data));
 
 export const getHomeData = createServerFn({ method: "GET" }).handler(async () => {
-  const featuredCategories = await repo.listCategories({ featuredOnly: true });
-  const categories = featuredCategories.length > 0 ? featuredCategories : await repo.listCategories();
+  // Execute categories and featured products in parallel
+  const [categories, featured] = await Promise.all([
+    repo.listCategories(),
+    repo.listProducts({ featured: true }),
+  ]);
+  const featuredCategories = categories.filter((c) => c.featured);
   return {
-    categories,
-    featured: await repo.listProducts({ featured: true }),
+    categories: featuredCategories.length > 0 ? featuredCategories : categories,
+    featured,
   };
 });
 
@@ -83,11 +93,11 @@ export const getPublicSettings = createServerFn({ method: "GET" }).handler(async
 export const getCategory = createServerFn({ method: "GET" })
   .validator((input: unknown) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
-    const categories = await repo.listCategories();
-    const category = categories.find((c) => c.slug === data.slug) ?? null;
+    const category = await repo.getCategoryBySlug(data.slug);
+    const products = category ? await repo.listProducts({ categorySlug: category.slug }) : [];
     return {
       category,
-      products: category ? await repo.listProducts({ categorySlug: category.slug }) : [],
+      products,
     };
   });
 

@@ -17,6 +17,7 @@ import path from "path";
 
 import { uploadImageToCloudinary } from "./cloudinary.server";
 import { prismaDb } from "./prisma.server";
+import { getCached, setCached, invalidateCache } from "./cache.server";
 import type {
   Category,
   DashboardStats,
@@ -176,6 +177,10 @@ async function withTimeout<T>(promise: Promise<T>, ms = 3000): Promise<T | typeo
 }
 
 export async function listCategories(opts?: { featuredOnly?: boolean }): Promise<Category[]> {
+  const cacheKey = `categories_${opts?.featuredOnly ? "featured" : "all"}`;
+  const cached = getCached<Category[]>(cacheKey);
+  if (cached) return cached;
+
   if (isPrismaReady()) {
     try {
       const rows = await withPrismaRetry(() =>
@@ -185,7 +190,7 @@ export async function listCategories(opts?: { featuredOnly?: boolean }): Promise
         }),
       );
       if (rows && Array.isArray(rows)) {
-        return rows.map((c: { id: string; slug: string; name: string; tagline: string; description: string; image: string; featured?: boolean }) => ({
+        const result = rows.map((c: { id: string; slug: string; name: string; tagline: string; description: string; image: string; featured?: boolean }) => ({
           id: c.id,
           slug: c.slug,
           name: c.name,
@@ -194,6 +199,7 @@ export async function listCategories(opts?: { featuredOnly?: boolean }): Promise
           image: c.image,
           featured: c.featured ?? false,
         }));
+        return setCached(cacheKey, result, 120);
       }
     } catch (err) {
       console.error("Prisma error in listCategories:", err);
@@ -202,11 +208,46 @@ export async function listCategories(opts?: { featuredOnly?: boolean }): Promise
   return [];
 }
 
+export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+  const cacheKey = `cat_slug_${slug}`;
+  const cached = getCached<Category>(cacheKey);
+  if (cached) return cached;
+
+  if (isPrismaReady()) {
+    try {
+      const c = await withPrismaRetry(() =>
+        prismaDb.category.findUnique({
+          where: { slug },
+        }),
+      );
+      if (c) {
+        const result: Category = {
+          id: c.id,
+          slug: c.slug,
+          name: c.name,
+          tagline: c.tagline,
+          description: c.description,
+          image: c.image,
+          featured: c.featured ?? false,
+        };
+        return setCached(cacheKey, result, 120);
+      }
+    } catch (err) {
+      console.error("Prisma error in getCategoryBySlug:", err);
+    }
+  }
+  return null;
+}
+
 export async function listProducts(opts?: {
   categorySlug?: string;
   featured?: boolean;
   includeInactive?: boolean;
 }): Promise<Product[]> {
+  const cacheKey = `products_${opts?.categorySlug || "all"}_${opts?.featured ?? "all"}_${opts?.includeInactive ?? "false"}`;
+  const cached = getCached<Product[]>(cacheKey);
+  if (cached) return cached;
+
   if (isPrismaReady()) {
     try {
       const rows = await withPrismaRetry(() =>
@@ -220,7 +261,7 @@ export async function listProducts(opts?: {
         }),
       );
       if (rows && Array.isArray(rows)) {
-        return rows.map((p) => ({
+        const result = rows.map((p) => ({
           id: p.id,
           slug: p.slug,
           name: p.name,
@@ -239,6 +280,7 @@ export async function listProducts(opts?: {
           createdAt: p.createdAt.toISOString(),
           updatedAt: p.updatedAt.toISOString(),
         }));
+        return setCached(cacheKey, result, 90);
       }
     } catch (err) {
       console.error('Prisma error in listProducts:', err);
@@ -248,27 +290,103 @@ export async function listProducts(opts?: {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const products = await listProducts({ includeInactive: true });
-  return products.find((p) => p.slug === slug) ?? null;
+  const cacheKey = `prod_slug_${slug}`;
+  const cached = getCached<Product>(cacheKey);
+  if (cached) return cached;
+
+  if (isPrismaReady()) {
+    try {
+      const p = await withPrismaRetry(() =>
+        prismaDb.product.findUnique({
+          where: { slug },
+        }),
+      );
+      if (p) {
+        const result: Product = {
+          id: p.id,
+          slug: p.slug,
+          name: p.name,
+          categoryId: (p.categoryId ?? '') as string,
+          category: p.category,
+          categorySlug: p.categorySlug,
+          priceFrom: Number(p.priceFrom || 0),
+          leadTimeDays: p.leadTimeDays || '1–2 weeks',
+          shortDescription: p.shortDescription || '',
+          description: p.description || '',
+          images: (p.images as string[]) || [],
+          options: (p.options as any[]) || [],
+          featured: Boolean(p.featured),
+          badge: p.badge ?? null,
+          active: Boolean(p.active),
+          createdAt: p.createdAt.toISOString(),
+          updatedAt: p.updatedAt.toISOString(),
+        };
+        return setCached(cacheKey, result, 90);
+      }
+    } catch (err) {
+      console.error('Prisma error in getProductBySlug:', err);
+    }
+  }
+  return null;
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
-  const products = await listProducts({ includeInactive: true });
-  return products.find((p) => p.id === id) ?? null;
+  const cacheKey = `prod_id_${id}`;
+  const cached = getCached<Product>(cacheKey);
+  if (cached) return cached;
+
+  if (isPrismaReady()) {
+    try {
+      const p = await withPrismaRetry(() =>
+        prismaDb.product.findUnique({
+          where: { id },
+        }),
+      );
+      if (p) {
+        const result: Product = {
+          id: p.id,
+          slug: p.slug,
+          name: p.name,
+          categoryId: (p.categoryId ?? '') as string,
+          category: p.category,
+          categorySlug: p.categorySlug,
+          priceFrom: Number(p.priceFrom || 0),
+          leadTimeDays: p.leadTimeDays || '1–2 weeks',
+          shortDescription: p.shortDescription || '',
+          description: p.description || '',
+          images: (p.images as string[]) || [],
+          options: (p.options as any[]) || [],
+          featured: Boolean(p.featured),
+          badge: p.badge ?? null,
+          active: Boolean(p.active),
+          createdAt: p.createdAt.toISOString(),
+          updatedAt: p.updatedAt.toISOString(),
+        };
+        return setCached(cacheKey, result, 90);
+      }
+    } catch (err) {
+      console.error('Prisma error in getProductById:', err);
+    }
+  }
+  return null;
 }
 
 export async function listTestimonials(): Promise<Testimonial[]> {
+  const cached = getCached<Testimonial[]>("testimonials");
+  if (cached) return cached;
+
   if (isPrismaReady()) {
     try {
       const rows = await withPrismaRetry(() => prismaDb.testimonial.findMany({ orderBy: { createdAt: 'asc' } }));
       if (rows && Array.isArray(rows)) {
-        return rows.map((t) => ({
+        const result = rows.map((t) => ({
           id: t.id,
           name: t.name,
           initials: t.initials || t.name.slice(0, 2).toUpperCase(),
           quote: t.quote,
           rating: t.rating,
         }));
+        return setCached("testimonials", result, 120);
       }
     } catch (err) {
       console.error('Prisma error in listTestimonials:', err);
@@ -278,16 +396,85 @@ export async function listTestimonials(): Promise<Testimonial[]> {
 }
 
 export async function getOrderByNumber(orderNumber: string): Promise<Order | null> {
-  const orders = await listOrders("all");
-  const found = orders.find(
-    (o) => o.orderNumber.toLowerCase() === orderNumber.trim().toLowerCase(),
-  );
-  return found ?? null;
+  if (isPrismaReady()) {
+    try {
+      const o = await withPrismaRetry(() =>
+        prismaDb.order.findUnique({
+          where: { orderNumber: orderNumber.trim() },
+        }),
+      );
+      if (o) {
+        return {
+          id: o.id,
+          orderNumber: o.orderNumber,
+          type: o.type as 'standard' | 'bespoke',
+          productId: o.productId ?? null,
+          productName: o.productName ?? null,
+          customerName: o.customerName,
+          phone: o.phone,
+          whatsapp: o.whatsapp ?? null,
+          address: o.address ?? null,
+          quantity: o.quantity,
+          notes: o.notes ?? null,
+          referenceImages: (o.referenceImages as string[]) || [],
+          selectedOptions: (o.selectedOptions as any[]) || [],
+          unitPrice: o.unitPrice ?? null,
+          total: o.total ?? null,
+          status: (o.status || 'new') as OrderStatus,
+          quotedPrice: o.quotedPrice ?? null,
+          paymentProofUrl: o.paymentProofUrl ?? null,
+          estimatedDelivery: o.estimatedDelivery?.toISOString().split('T')[0] ?? null,
+          adminNote: o.adminNote ?? null,
+          createdAt: o.createdAt.toISOString(),
+          updatedAt: o.updatedAt.toISOString(),
+        };
+      }
+    } catch (err) {
+      console.error('Prisma error in getOrderByNumber:', err);
+    }
+  }
+  return null;
 }
 
 export async function getOrderById(id: string): Promise<Order | null> {
-  const orders = await listOrders("all");
-  return orders.find((o) => o.id === id) ?? null;
+  if (isPrismaReady()) {
+    try {
+      const o = await withPrismaRetry(() =>
+        prismaDb.order.findUnique({
+          where: { id },
+        }),
+      );
+      if (o) {
+        return {
+          id: o.id,
+          orderNumber: o.orderNumber,
+          type: o.type as 'standard' | 'bespoke',
+          productId: o.productId ?? null,
+          productName: o.productName ?? null,
+          customerName: o.customerName,
+          phone: o.phone,
+          whatsapp: o.whatsapp ?? null,
+          address: o.address ?? null,
+          quantity: o.quantity,
+          notes: o.notes ?? null,
+          referenceImages: (o.referenceImages as string[]) || [],
+          selectedOptions: (o.selectedOptions as any[]) || [],
+          unitPrice: o.unitPrice ?? null,
+          total: o.total ?? null,
+          status: (o.status || 'new') as OrderStatus,
+          quotedPrice: o.quotedPrice ?? null,
+          paymentProofUrl: o.paymentProofUrl ?? null,
+          estimatedDelivery: o.estimatedDelivery?.toISOString().split('T')[0] ?? null,
+          adminNote: o.adminNote ?? null,
+          createdAt: o.createdAt.toISOString(),
+          updatedAt: o.updatedAt.toISOString(),
+        };
+      }
+    } catch (err) {
+      console.error('Prisma error in getOrderById:', err);
+    }
+  }
+  return null;
 }
 
 export async function listOrders(status?: OrderStatus | "all"): Promise<Order[]> {
@@ -359,11 +546,14 @@ export async function listMessages(): Promise<Message[]> {
 /* -------------------------------- Settings -------------------------------- */
 
 export async function getSettings(): Promise<Settings> {
+  const cached = getCached<Settings>("settings");
+  if (cached) return cached;
+
   if (isPrismaReady()) {
     try {
       const s = await withPrismaRetry(() => prismaDb.setting.findUnique({ where: { id: 'main' } }));
       if (s) {
-        return {
+        const result: Settings = {
           adminNotificationEmail: memStore.settings.adminNotificationEmail,
           whatsappNumber: s.whatsapp,
           whatsappDisplay: s.whatsapp,
@@ -374,6 +564,7 @@ export async function getSettings(): Promise<Settings> {
           vodafoneCashNumber: memStore.settings.vodafoneCashNumber,
           updatedAt: s.updatedAt.toISOString(),
         };
+        return setCached("settings", result, 120);
       }
     } catch (err) {
       console.error('Prisma error in getSettings:', err);
@@ -385,6 +576,7 @@ export async function getSettings(): Promise<Settings> {
 export async function updateSettings(
   patch: Partial<Omit<Settings, "updatedAt">>,
 ): Promise<Settings> {
+  invalidateCache("settings");
   if (isPrismaReady()) {
     try {
       const s = await prismaDb.setting.upsert({
@@ -801,6 +993,8 @@ export async function upsertCategory(input: {
   image?: string;
   featured?: boolean;
 }): Promise<Category> {
+  invalidateCache("cat");
+  invalidateCache("categories");
   const slug =
     input.slug?.trim() ||
     input.name
@@ -869,6 +1063,8 @@ export async function upsertCategory(input: {
 }
 
 export async function deleteCategory(id: string): Promise<boolean> {
+  invalidateCache("cat");
+  invalidateCache("categories");
   if (isPrismaReady()) {
     try {
       await prismaDb.category.delete({ where: { id } });
@@ -902,6 +1098,8 @@ export async function upsertProduct(input: {
   badge?: string | null;
   active?: boolean;
 }): Promise<Product> {
+  invalidateCache("prod");
+  invalidateCache("products");
   const categories = await listCategories();
   const category = categories.find((c) => c.slug === input.categorySlug) ?? categories[0]!;
   const slug =
@@ -1062,6 +1260,8 @@ export async function upsertProduct(input: {
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {
+  invalidateCache("prod");
+  invalidateCache("products");
   if (isPrismaReady()) {
     try {
       await prismaDb.product.delete({ where: { id } });
