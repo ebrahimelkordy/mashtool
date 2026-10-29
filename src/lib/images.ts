@@ -29,7 +29,7 @@ const assetMap: Record<string, string> = {
   "/src/assets/wall-art.jpg": wallArt,
 };
 
-export function resolveImageUrl(src?: string | null, fallback = heroDrape, width = 650): string {
+export function resolveImageUrl(src?: string | null, fallback = "", width = 650): string {
   if (!src) return fallback;
   if (assetMap[src]) return assetMap[src];
   if (src.startsWith("/") || src.startsWith("http://") || src.startsWith("https://") || src.startsWith("data:")) {
@@ -50,11 +50,14 @@ export function resolveImageUrl(src?: string | null, fallback = heroDrape, width
   return fallback;
 }
 
-export function getBlurImageUrl(src?: string | null, fallback = heroDrape): string {
+export function getBlurImageUrl(src?: string | null, fallback = ""): string {
   if (!src) return fallback;
   if (src.includes("images.unsplash.com")) {
     const baseUrl = src.split("?")[0];
     return `${baseUrl}?w=30&q=20&blur=10&auto=format&fit=crop&fm=webp`;
+  }
+  if (src.includes("res.cloudinary.com")) {
+    return src.replace("/upload/", "/upload/w_40,e_blur:1000,q_auto,f_auto/");
   }
   return resolveImageUrl(src, fallback, 100);
 }

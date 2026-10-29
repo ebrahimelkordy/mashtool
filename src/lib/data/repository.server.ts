@@ -15,7 +15,7 @@ import artisanHands from "@/assets/artisan-hands.jpg";
 import fs from "fs";
 import path from "path";
 
-import { supabase, getSupabaseClient } from "./supabase.server";
+import { uploadImageToCloudinary } from "./cloudinary.server";
 import { prismaDb } from "./prisma.server";
 import type {
   Category,
@@ -36,8 +36,9 @@ export const heroImage = heroDrape;
 
 // Prisma is active — reads/writes go directly to PostgreSQL via Prisma Data Platform
 function isSupabaseReady(): boolean {
-  return false; // Supabase disabled; using Prisma instead
+  return false; // Supabase fully removed; Cloudinary handles images & Prisma handles database
 }
+const supabase: any = null;
 
 // Prisma availability check
 function isPrismaReady(): boolean {
@@ -120,67 +121,31 @@ export async function saveFile(input: {
   const id = uid() + uid();
   const buffer = Buffer.from(input.base64, "base64");
 
-  // 1. Try Supabase Storage if client is available
-  const supabaseClient = getSupabaseClient();
-  if (supabaseClient) {
-    try {
-      const filePath = `uploads/${id}_${input.fileName.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
-      const { data: uploadData, error: uploadErr } = await supabaseClient.storage
-        .from("product-images")
-        .upload(filePath, buffer, {
-          contentType: input.contentType,
-          upsert: true,
-        });
+  // 1. Upload to Cloudinary for permanent, fast CDN storage
+  try {
+    const uploadRes = await uploadImageToCloudinary({
+      base64: input.base64,
+      contentType: input.contentType,
+      fileName: input.fileName,
+      folder: "mashtool/products",
+    });
 
-      if (!uploadErr && uploadData) {
-        const { data: publicUrlData } = supabaseClient.storage
-          .from("product-images")
-          .getPublicUrl(filePath);
-
-        return {
-          id,
-          fileName: input.fileName,
-          contentType: input.contentType,
-          base64: "",
-          size: buffer.length,
-          url: publicUrlData.publicUrl,
-          createdAt: new Date().toISOString(),
-        };
-      } else {
-        console.warn("Supabase upload error, trying local filesystem:", uploadErr);
-      }
-    } catch (err) {
-      console.warn("Supabase storage exception, trying local filesystem:", err);
-    }
+    const file: StoredFile = {
+      id,
+      fileName: input.fileName,
+      contentType: input.contentType,
+      base64: "",
+      size: uploadRes.bytes || buffer.length,
+      url: uploadRes.url,
+      createdAt: new Date().toISOString(),
+    };
+    memStore.files.set(id, file);
+    return { ...file };
+  } catch (err) {
+    console.error("Cloudinary upload failed, using fallback data URL:", err);
   }
 
-  // 2. Try local filesystem if process.cwd() is available
-  if (typeof process !== "undefined" && process.cwd) {
-    try {
-      const uploadDir = path.join(process.cwd(), "public/images/uploaded/dashboard");
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
-      const fileExt = input.contentType.split("/")[1] || "png";
-      const fileName = `${id}.${fileExt}`;
-      const filePath = path.join(uploadDir, fileName);
-      fs.writeFileSync(filePath, buffer);
-      
-      return {
-        id,
-        fileName: input.fileName,
-        contentType: input.contentType,
-        base64: "",
-        size: buffer.length,
-        url: `/images/uploaded/dashboard/${fileName}`,
-        createdAt: new Date().toISOString(),
-      };
-    } catch (err) {
-      console.warn("Local file save failed, using base64 fallback:", err);
-    }
-  }
-
-  // 3. Absolute fallback: Base64 data URL
+  // 2. Fallback: Base64 data URL
   const dataUrl = `data:${input.contentType};base64,${input.base64}`;
   const file: StoredFile = {
     id,
